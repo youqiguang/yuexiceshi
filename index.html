@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高雅人生重开模拟器 v3.5 🐧</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --primary: #2c3e50;
+            --text-main: #333;
+            --accent: #d35400;
+            --highlight-bg: rgba(231, 76, 60, 0.08);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-main);
+            transition: background-color 0.8s ease, color 0.8s ease;
+            background-image: radial-gradient(#dce4ec 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        body.mode-xiuxian { --bg-color: #e8f5e9; --primary: #2e7d32; --card-bg: #f1f8e9; background-image: none; }
+        body.mode-2d { --bg-color: #fce4ec; --primary: #c2185b; --card-bg: #fff0f5; background-image: none; }
+        body.mode-horror { --bg-color: #1a1a1a; --primary: #000; --card-bg: #2a2a2a; --text-main: #b0bec5; background-image: none; }
+        body.mode-cthulhu { --bg-color: #1b2838; --primary: #0a3d2e; --card-bg: #253447; --text-main: #8fa3b0; background-image: none; }
+        body.mode-xuanhuan { --bg-color: #fff3e0; --primary: #e65100; --card-bg: #ffe0b2; background-image: none; }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            position: relative;
+            transition: all 0.8s ease;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+        }
+        body.mode-2d .container { animation: heartbeat 1.5s infinite; }
+
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.8s ease;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .penguin-icon { font-size: 1.5rem; animation: waddle 1s infinite alternate; }
+        @keyframes waddle { from { transform: rotate(-10deg); } to { transform: rotate(10deg); } }
+
+        .screen { padding: 25px; flex: 1; display: none; flex-direction: column; overflow-y: auto; }
+        .screen.active { display: flex; }
+
+        .start-screen { text-align: center; justify-content: center; }
+        .meme-banner { font-size: 70px; margin: 20px 0; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        .subtitle { font-size: 0.9rem; color: #666; margin-top: 10px; font-style: italic; }
+        .version-info { margin-top: 30px; font-size: 0.8rem; color: #999; text-align: left; background: #f8f9fa; padding: 15px; border-radius: 10px; }
+        .special-hint { color: var(--accent); font-weight: bold; }
+        .warning-box { background: #fff3cd; border-left: 4px solid #ff6b6b; padding: 12px; margin-top: 15px; border-radius: 8px; color: #856404; font-size: 0.85rem; }
+
+        .btn {
+            background: var(--primary); color: white; border: none; padding: 16px 32px; font-size: 1.05rem;
+            border-radius: 50px; cursor: pointer; margin-top: 25px; box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            transition: all 0.2s; font-weight: bold; letter-spacing: 1px;
+        }
+        .btn:active { transform: scale(0.95); }
+        #restart-btn { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: none; z-index: 100; width: 85%; max-width: 460px; }
+
+        .setup-screen h2 { text-align: center; margin-bottom: 25px; color: var(--primary); }
+        .gender-select { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .gender-btn { padding: 10px 20px; border: 2px solid #ddd; background: transparent; border-radius: 12px; cursor: pointer; color: var(--text-main); font-weight: bold; transition: all 0.2s; font-size: 0.9rem; }
+        .gender-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        .points-counter { text-align: center; font-weight: bold; margin-bottom: 20px; font-size: 1.1rem; }
+
+        .stat-row { margin-bottom: 18px; display: flex; align-items: center; gap: 12px; background: #f8f9fa; padding: 10px; border-radius: 12px; }
+        .stat-label { width: 60px; font-weight: bold; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
+        input[type="range"] { flex: 1; accent-color: var(--primary); cursor: pointer; height: 6px; }
+        .stat-val { font-weight: bold; color: var(--primary); width: 30px; text-align: right; }
+
+        #log-container { flex: 1; overflow-y: auto; padding-bottom: 120px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .log-item {
+            padding: 12px 5px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            opacity: 0;
+            animation: slideUp 0.4s ease-out forwards;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .age-tag {
+            display: inline-block; background: var(--primary); color: white; padding: 3px 8px; border-radius: 6px;
+            font-size: 0.75rem; margin-right: 10px; min-width: 32px; text-align: center; font-weight: bold;
+        }
+
+        .highlight { color: #c0392b; font-weight: bold; background: var(--highlight-bg); padding: 2px 6px; border-radius: 4px; }
+        .golden { color: #f39c12; font-weight: 900; text-shadow: 1px 1px 0 rgba(0,0,0,0.1); }
+        
+        .xiuxian-text { color: #2e7d32; font-weight: bold; }
+        .anime-text { color: #d81b60; }
+        .horror-text { color: #ff5252; font-weight: bold; }
+        .cthulhu-text { color: #4db6ac; font-style: italic; }
+        .xuanhuan-text { color: #ff6f00; font-weight: bold; }
+
+        .choice-box {
+            background: rgba(255,255,255,0.95);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .choice-title { font-weight: bold; margin-bottom: 12px; color: var(--primary); font-size: 1rem; }
+        .choice-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: #eceff1;
+            border: 2px solid #b0bec5;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            color: #333;
+            text-align: left;
+        }
+        .choice-btn:active { transform: scale(0.98); background: var(--primary); color: white; border-color: var(--primary); }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            max-width: 350px;
+            width: 85%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .modal-content h3 { margin-top: 0; color: #c0392b; }
+        .modal-btn {
+            padding: 12px 24px;
+            margin: 8px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .modal-btn.confirm { background: #e74c3c; color: white; }
+        .modal-btn.cancel { background: #95a5a6; color: white; }
+        .modal-btn:active { transform: scale(0.95); }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header" id="header-bar">
+        <span class="penguin-icon">🐧</span>
+        <span id="title-text">高雅人生模拟器</span>
+        <span class="penguin-icon">🍷</span>
+    </div>
+
+    <div id="screen-start" class="screen active start-screen">
+        <div class="meme-banner">🕴️🎲🦑</div>
+        <h1>人生重开 v3.5</h1>
+        <p class="subtitle">"做人太累了，不如做个高雅的企鹅。"</p>
+        
+        <div class="version-info">
+            <strong>本周目特色：</strong><br>
+            • 可转生为非人类物种<br>
+            • 随机暴毙系统<br>
+            • <span class="special-hint">多条世界线与互动选择</span>
+        </div>
+
+        <div class="warning-box">
+            ⚠️ <strong>内容警告：</strong>本游戏含微恐怖向内容，心理承受能力较弱者请谨慎游玩
+        </div>
+        
+        <button class="btn" onclick="goToSetup()">开始抽卡</button>
+    </div>
+
+    <div id="screen-setup" class="screen setup-screen">
+        <h2>定制你的天赋 (20点)</h2>
+        <div class="gender-select">
+            <button class="gender-btn selected" onclick="selectGender('male', this)">男</button>
+            <button class="gender-btn" onclick="selectGender('female', this)">女</button>
+            <button class="gender-btn" onclick="selectGender('other', this)">???</button>
+        </div>
+        
+        <div class="points-counter" style="color:var(--accent)">
+            剩余点数: <span id="points-display">20</span>
+        </div>
+
+        <div id="sliders-container"></div>
+
+        <button class="btn" onclick="startGame()">开启随机人生</button>
+    </div>
+
+    <div id="screen-game" class="screen game-screen">
+        <div id="log-container"></div>
+        <button id="restart-btn" class="btn" onclick="resetGame()">再次重开</button>
+    </div>
+</div>
+
+<div id="horror-modal" class="modal">
+    <div class="modal-content">
+        <h3>⚠️ 注意</h3>
+        <p>即将进入<strong id="modal-mode-name">恐怖</strong>模拟器线路</p>
+        <p style="font-size: 0.9rem; color: #666;">该线路包含微恐怖内容，是否继续？</p>
+        <button class="modal-btn confirm" onclick="confirmHorrorMode()">继续游玩</button>
+        <button class="modal-btn cancel" onclick="cancelHorrorMode()">取消</button>
+    </div>
+</div>
+
+<script>
+const TOTAL_POINTS = 20;
+const statConfig = [
+    { key: 'face', name: '颜值', icon: '💅' },
+    { key: 'iq', name: '智商', icon: '🧠' },
+    { key: 'body', name: '体质', icon: '💪' },
+    { key: 'money', name: '家境', icon: '💰' },
+    { key: 'luck', name: '气运', icon: '🍀' }
+];
+
+const speciesList = ['高雅企鹅', '水豚', '赛博蟑螂', '一棵树', '史莱姆'];
+
+let remainingPoints = TOTAL_POINTS;
+let stats = { face:0, iq:0, body:0, money:0, luck:0 };
+let selectedGenderTag = 'male';
+let finalGenderOrSpecies = '人类男性';
+let age = 0;
+let isDead = false;
+let gameInterval = null;
+let currentMode = 'normal';
+let pendingHorrorMode = null;
+let recentEvents = []; // 用于去重
+
+// ----------------- 剧情库 -----------------
+
+// 人类分龄剧情池
+const humanEvents = {
+    baby: [ // 0-3岁
+        "你试图翻身，但因为太胖失败了。", "你抓住了大人的手指，他们笑得很开心。", "奶粉太烫了，你大哭一场。", 
+        "你尿床了，感觉暖洋洋的。", "你在地板上爬行，发现了一颗灰尘。", "你学会了喊'妈妈'，全家都很激动。",
+        "打疫苗的时候你哭得撕心裂肺。", "由于长得可爱，隔壁阿姨总想捏你的脸。", "你把玩具塞进了嘴里。"
+    ],
+    child: [ // 4-12岁
+        "上幼儿园第一天，你因为抢积木和人打了一架。", "你在公园抓到了一只独角仙。", "不想写作业，被妈妈骂了一顿。",
+        "你偷吃了冰箱里的布丁。", "考试得了双百，奖励是一顿肯德基。", "你和邻居家的小孩成了死党。",
+        "因为挑食被父母混合双打。", "你开始思考奥特曼是不是真的存在。", "在学校运动会上摔了一跤，很丢脸。"
+    ],
+    teen: [ // 13-18岁
+        "青春期到了，脸上开始长痘痘。", "暗恋隔壁班的同学，但不敢表白。", "繁重的课业让你喘不过气。",
+        "偷偷去网吧被抓了个现行。", "你在日记本上写满了中二的幻想。", "体育课上你投进了一个帅气的三分球。",
+        "由于沉迷小说，成绩下滑了。", "你开始觉得父母很唠叨。", "高考前夜，你失眠了。"
+    ],
+    adult: [ // 19-50岁
+        "大学生活比想象中更自由，也更迷茫。", "你为了抢选修课熬夜守在电脑前。", "毕业求职四处碰壁。",
+        "第一份工资你请父母吃了一顿饭。", "被催婚的压力越来越大。", "加班到深夜，看到城市的霓虹灯。",
+        "你养了一只猫，成为了铲屎官。", "参加同学聚会，发现大家变化很大。", "为了房贷，你不得不更加努力工作。",
+        "你在网络上围观了一场骂战，感觉很无聊。", "体检报告上出现了一些小箭头。", "周末只想躺在床上什么都不做。"
+    ],
+    old: [ // 51-100岁
+        "退休生活开始了，你迷上了广场舞。", "儿女工作很忙，你学会了自己做饭。", "视力下降，看报纸需要老花镜。",
+        "你在公园下棋，赢了隔壁老王。", "回忆往事，有些遗憾但也算充实。", "身体大不如前，开始关注养生。",
+        "孙子孙女来探望，是你最开心的时刻。", "老朋友一个个离开了，你感到孤独。", "你在阳光下打了个盹，梦见了年轻的时候。"
+    ]
+};
+
+const speciesEvents = {
+    '高雅企鹅': [
+        "你混入了人类的高级晚宴，没人发现。", "你在腾讯总部前徘徊，试图认祖归宗。", "你学会了用红酒杯装鱼汤。",
+        "你优雅地滑行在冰面上。", "人类夸你'好绅士'。", "你因偷吃极地科考站的罐头被通缉。"
+    ],
+    '水豚': [
+        "你在温泉里泡了一整天。", "一只鳄鱼试图吃你，后来你们成了朋友。", "这世界太乱，你只想发呆。",
+        "你的头上顶着一只橘子。", "无论发生什么，你都心如止水。", "你被人类评为'情绪最稳定的生物'。"
+    ],
+    '赛博蟑螂': [
+        "你在核废墟中醒来，身体闪烁着霓虹光。", "你试图啃食高压电线充饥。", "你黑入了一台自动贩卖机。",
+        "人类试图踩死你，但你硬度惊人。", "你传播了一种电子病毒。", "你在下水道建立了自己的数据王国。"
+    ],
+    '一棵树': [
+        "光合作用中...感觉很充实。", "一只狗在你脚下撒尿，你很生气但动不了。", "鸟儿在你头顶筑巢。",
+        "由于长得太歪，躲过了伐木工的电锯。", "干旱季节，你努力向下扎根。", "几个孩子在你身上刻了字。"
+    ],
+    '史莱姆': [
+        "你变成了一把椅子的形状。", "你吞噬了一把生锈的剑。", "冒险者把你当成了低级怪，你反杀了。",
+        "你感觉身体很Q弹。", "你分裂出了一个小号。", "你在草丛里睡觉，被踩了一脚。"
+    ]
+};
+
+// 特殊模式剧情
+const xiuxianEvents = [
+    "你感觉到空气中有奇妙的波动，引气入体！", "你在地摊上买到了一本发光的古籍。", "闭关修炼中，境界松动。",
+    "你御剑飞行送外卖，从未超时。", "尝试突破，天降雷劫！", "你炼制了一炉丹药，把自己吃坏了肚子。",
+    "宗门大比，你险胜对手。", "你在秘境中捡到一把断剑。", "师妹对你暗送秋波，你心中只有大道。",
+    "路见不平，你随手灭了一个山贼寨子。"
+];
+
+const loveEvents = [
+    "画风突变，周围的人眼睛都变大了！", "学校转来神秘转校生，坐在后排靠窗。", "你在图书馆与TA四目相对。",
+    "收到了一封匿名情书，字迹清秀。", "文化祭当天，班级决定开执事咖啡厅。", "下雨天没带伞，TA把伞借给了你。",
+    "放学后被约到天台。", "一起做值日，气氛暧昧。", "不小心撞到了霸道总裁/傲娇校花。", "在这个看脸的世界，你如鱼得水。"
+];
+
+const horrorEvents = [
+    "今晚的月亮是红色的，像血一样。", "镜子里的你没有眨眼，还对你笑了。", "总感觉身后有脚步声，回头却没人。",
+    "收到了自己号码发来的短信：'不要回头'。", "半夜醒来，房间里多了一个影子。", "楼上传来弹珠落地的声音，但楼上没人住。",
+    "家里的玩偶似乎换了个位置。", "你听到墙壁里有抓挠的声音。", "电梯停在了不存在的楼层。", "电视机在半夜自动打开，全是雪花屏。"
+];
+
+const cthulhuEvents = [
+    "你在海边捡到刻着诡异符号的石头。", "梦见深海中有什么在呼唤你的名字。", "你开始对古老的文明产生病态的兴趣。",
+    "阅读禁忌书籍，理智值下降，知识增加了。", "你看到了不该看的东西，san值狂掉。", "邻居的长相越来越像鱼。",
+    "天空中的星星位置不对劲。", "你听到了无法名状的低语。", "你的皮肤上长出了奇怪的鳞片。", "你画出的画让所有人感到恶心。"
+];
+
+const xuanhuanEvents = [
+    "你体内觉醒了远古神兽血脉！", "天降异象，紫气东来三万里！", "获得了一枚神秘戒指，里面住着老爷爷。",
+    "遇到了绝世高人指点，功力大增。", "你的天赋震惊了四大宗门。", "退婚流开局，三十年河东三十年河西。",
+    "你捡到一颗神兽蛋。", "进入上古遗迹，获得传承。", "哪怕背负天渊，需一手托原始帝城...", "你成为了传说中的位面之子。"
+];
+
+// ----------------- 功能函数 -----------------
+
+function initSetup() {
+    const container = document.getElementById('sliders-container');
+    container.innerHTML = '';
+    statConfig.forEach(stat => {
+        container.innerHTML += `
+            <div class="stat-row">
+                <label class="stat-label">${stat.icon} ${stat.name}</label>
+                <input type="range" min="0" max="10" value="0" data-key="${stat.key}" oninput="handleInput('${stat.key}', this.value)">
+                <span class="stat-val" id="val-${stat.key}">0</span>
+            </div>`;
+    });
+    resetStatsUI();
+}
+
+function resetStatsUI() {
+    remainingPoints = TOTAL_POINTS;
+    for(let k in stats) stats[k] = 0;
+    document.querySelectorAll('input[type="range"]').forEach(el => el.value = 0);
+    document.querySelectorAll('.stat-val').forEach(el => el.innerText = '0');
+    updatePointDisplay();
+}
+
+function handleInput(key, val) {
+    val = parseInt(val);
+    let used = 0;
+    document.querySelectorAll('input[type="range"]').forEach(input => {
+        if(input.dataset.key !== key) used += parseInt(input.value);
+    });
+    
+    if (used + val > TOTAL_POINTS) {
+        val = TOTAL_POINTS - used;
+        document.querySelector(`input[data-key="${key}"]`).value = val;
+    }
+    
+    stats[key] = val;
+    document.getElementById(`val-${key}`).innerText = val;
+    remainingPoints = TOTAL_POINTS - (used + val);
+    updatePointDisplay();
+}
+
+function updatePointDisplay() {
+    const pDisplay = document.getElementById('points-display');
+    pDisplay.innerText = remainingPoints;
+    pDisplay.style.color = remainingPoints === 0 ? '#27ae60' : '#d35400';
+}
+
+function selectGender(tag, btn) {
+    selectedGenderTag = tag;
+    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+}
+
+function switchScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+}
+
+function goToSetup() { switchScreen('screen-setup'); }
+
+function startGame() {
+    if (remainingPoints > 0) { alert("属性点没分完！"); return; }
+    
+    switchScreen('screen-game');
+    
+    age = -1; isDead = false; currentMode = 'normal';
+    recentEvents = []; // 清空历史
+    document.body.className = '';
+    document.getElementById('log-container').innerHTML = '';
+    document.getElementById('restart-btn').style.display = 'none';
+    document.getElementById('title-text').innerText = "高雅人生模拟器";
+
+    if (selectedGenderTag === 'other') {
+        finalGenderOrSpecies = speciesList[Math.floor(Math.random() * speciesList.length)];
+    } else {
+        finalGenderOrSpecies = selectedGenderTag === 'male' ? '人类男性' : '人类女性';
+    }
+
+    addLog(`转生身份:【${finalGenderOrSpecies}】`, false, false);
+    
+    gameInterval = setInterval(gameLoop, 1000); // 稍微放慢速度便于阅读
+}
+
+function gameLoop() {
+    age++;
+    
+    if (checkSuddenDeath()) return;
+
+    // 寿命逻辑
+    let maxAge = 80;
+    if (!finalGenderOrSpecies.includes('人类')) maxAge = 40; // 动物寿命短
+    if (currentMode === 'xiuxian' || currentMode === 'xuanhuan') maxAge = 500;
+    if (finalGenderOrSpecies === '一棵树' || finalGenderOrSpecies === '赛博蟑螂') maxAge = 200;
+    
+    // 老死逻辑，增加随机性
+    if (age > maxAge && Math.random() < (0.1 + (age - maxAge)*0.02)) {
+        die(`寿终正寝，享年${age}岁。`);
+        return;
+    }
+
+    generateEvent();
+    
+    const logBox = document.getElementById('log-container');
+    logBox.scrollTop = logBox.scrollHeight;
+}
+
+function checkSuddenDeath() {
+    if (age <= 0) return false;
+    let deathChance = 0.001; // 降低基础死亡率
+    
+    if (stats.body < 3) deathChance += 0.005;
+    if (stats.luck < 2) deathChance += 0.01;
+    if (currentMode === 'horror' || currentMode === 'cthulhu') deathChance += 0.03;
+
+    if (Math.random() < deathChance) {
+        let reason = "喝水呛死了。";
+        if (currentMode === 'horror') reason = "你突然消失了，地上只剩一滩水。";
+        if (currentMode === 'xiuxian') reason = "你走火入魔，爆体而亡。";
+        die(`【突发恶讯】${reason}`);
+        return true;
+    }
+    return false;
+}
+
+function die(msg) {
+    clearInterval(gameInterval);
+    isDead = true;
+    addLog(msg, true);
+    document.getElementById('restart-btn').style.display = 'block';
+}
+
+function generateEvent() {
+    let text = "";
+    let styleClass = "";
+    let isHighlight = false;
+    let isGolden = false;
+
+    // 特殊模式触发逻辑 (仅在正常模式且为人类时触发)
+    if (currentMode === 'normal' && finalGenderOrSpecies.includes('人类') && age > 10 && age < 30 && Math.random() < 0.08) {
+        const roll = Math.random();
+        
+        // 恐怖向需要警告，其他直接跳
+        if (roll < 0.15 && stats.iq > 5) {
+            // 修仙
+            switchMode('xiuxian');
+            addLog("【机缘】你捡到一块温润的玉佩，脑海中浮现出奇异功法！", false, true);
+            return;
+        } else if (roll < 0.3 && stats.face > 6) {
+            // 恋爱
+            switchMode('2d');
+            addLog("【突变】世界线变动！你的画风变得精致起来了。", false, true);
+            return;
+        } else if (roll < 0.45) {
+            // 玄幻
+            switchMode('xuanhuan');
+            addLog("【觉醒】天空中划过一道流星，直接砸向了你！", false, true);
+            return;
+        } else if (roll < 0.7) {
+            // 恐怖 (需弹窗)
+            pendingHorrorMode = 'horror';
+            showHorrorModal('规则怪谈');
+            return;
+        } else {
+            // 克苏鲁 (需弹窗)
+            pendingHorrorMode = 'cthulhu';
+            showHorrorModal('克苏鲁');
+        return;
+        }
+    }
+
+    // 根据模式生成文本
+    if (currentMode === 'xiuxian') {
+        styleClass = "xiuxian-text";
+        // 修仙抉择
+        if (age === 50) {
+            showChoice("宗门遭遇灭顶之灾，魔教来袭！", [
+                {text: "誓死守卫宗门", effect: () => { addLog("你战至力竭，但在绝境中领悟了剑意！", true, true); }},
+                {text: "带着秘籍跑路", effect: () => { addLog("你苟且偷生，成为了散修。", false); stats.luck -= 2; }}
+            ]);
+            return;
+        }
+        text = getNonRepeatingRandom(xiuxianEvents);
+
+    } else if (currentMode === '2d') {
+        styleClass = "anime-text";
+        // 恋爱抉择
+        if (age === 18) {
+            showChoice("毕业典礼上，两人同时向你告白！", [
+                {text: "选择青梅竹马", effect: () => { addLog("果然还是陪伴最长情，你们过上了甜蜜的生活。", false, true); }},
+                {text: "选择天降系转校生", effect: () => { addLog("充满激情与未知的恋情开始了！", false, true); }},
+                {text: "我全都要（危）", effect: () => { die("你被柴刀了。结局：好船。"); }}
+            ]);
+            return;
+        }
+        text = getNonRepeatingRandom(loveEvents);
+
+    } else if (currentMode === 'horror') {
+        styleClass = "horror-text";
+        isHighlight = true;
+        // 恐怖抉择
+        if (age % 10 === 0) { // 每10年一次生存检定
+            showChoice("半夜有人疯狂敲门，猫眼外一片漆黑。", [
+                {text: "开门查看", effect: () => { die("有些门是不能开的。你变成了失踪人口。"); }},
+                {text: "躲进衣柜", effect: () => { addLog("敲门声持续了一小时后消失了，你活了下来。", true); }}
+            ]);
+            return;
+        }
+        text = getNonRepeatingRandom(horrorEvents);
+
+    } else if (currentMode === 'cthulhu') {
+        styleClass = "cthulhu-text";
+        // 克苏鲁抉择
+        if (age === 40) {
+            showChoice("你发现了一本用人皮装订的书。", [
+                {text: "阅读它", effect: () => { addLog("你理解了宇宙的真理...然后疯了。", false, true); stats.iq = 999; }},
+                {text: "烧掉它", effect: () => { addLog("书发出尖叫声化为灰烬，你感到一阵轻松。", false); }}
+            ]);
+            return;
+        }
+        text = getNonRepeatingRandom(cthulhuEvents);
+
+    } else if (currentMode === 'xuanhuan') {
+        styleClass = "xuanhuan-text";
+        isGolden = true;
+        text = getNonRepeatingRandom(xuanhuanEvents);
+
+    } else {
+        // 正常模式
+        if (age === 0) {
+            text = "你出生了，是个健康的宝宝。";
+        } else if (!finalGenderOrSpecies.includes('人类')) {
+            // 异种族
+            let pool = speciesEvents[finalGenderOrSpecies] || humanEvents.adult;
+            text = getNonRepeatingRandom(pool);
+        } else {
+            // 人类分龄剧情
+            let pool = [];
+            if (age <= 3) pool = humanEvents.baby;
+            else if (age <= 12) pool = humanEvents.child;
+            else if (age <= 18) pool = humanEvents.teen;
+            else if (age <= 50) pool = humanEvents.adult;
+            else pool = humanEvents.old;
+            
+            text = getNonRepeatingRandom(pool);
+        }
+    }
+
+    addLog(text, isHighlight, isGolden, styleClass);
+}
+
+// 去重随机函数
+function getNonRepeatingRandom(arr) {
+    let available = arr.filter(item => !recentEvents.includes(item));
+    // 如果可用池空了，就清空一半历史记录
+    if (available.length === 0) {
+        recentEvents = recentEvents.slice(recentEvents.length / 2);
+        available = arr;
+    }
+    const text = available[Math.floor(Math.random() * available.length)];
+    
+    recentEvents.push(text);
+    if (recentEvents.length > 5) recentEvents.shift(); // 保持历史记录长度为5
+    
+    return text;
+}
+
+function switchMode(mode) {
+    currentMode = mode;
+    document.body.className = `mode-${mode}`;
+    const titles = {
+        'xiuxian': '修仙模拟器',
+        '2d': '恋爱养成模拟器',
+        'horror': '规则怪谈模拟器',
+        'cthulhu': '克苏鲁模拟器',
+        'xuanhuan': '玄幻模拟器'
+    };
+    document.getElementById('title-text').innerText = titles[mode] || '高雅人生模拟器';
+}
+
+function showHorrorModal(modeName) {
+    clearInterval(gameInterval);
+    document.getElementById('modal-mode-name').innerText = modeName;
+    document.getElementById('horror-modal').classList.add('active');
+}
+
+function confirmHorrorMode() {
+    document.getElementById('horror-modal').classList.remove('active');
+    if (pendingHorrorMode) {
+        switchMode(pendingHorrorMode);
+        addLog(`【世界线变动】你感觉到周围的气氛不对劲...进入${pendingHorrorMode}线！`, true, true);
+        pendingHorrorMode = null;
+    }
+    gameInterval = setInterval(gameLoop, 1000);
+}
+
+function cancelHorrorMode() {
+    document.getElementById('horror-modal').classList.remove('active');
+    pendingHorrorMode = null;
+    addLog("你感到一阵寒意，但你决定无视它，继续普通的生活。", false);
+    gameInterval = setInterval(gameLoop, 1000);
+}
+
+function showChoice(title, options) {
+    clearInterval(gameInterval);
+    const logBox = document.getElementById('log-container');
+    
+    const choiceDiv = document.createElement('div');
+    choiceDiv.className = 'choice-box';
+    choiceDiv.innerHTML = `<div class="choice-title">${title}</div>`;
+    
+    options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.innerText = opt.text;
+        btn.onclick = () => {
+            opt.effect();
+            choiceDiv.remove();
+            // 只有当没有死亡时才恢复循环
+            if (!isDead) {
+                gameInterval = setInterval(gameLoop, 1000);
+            }
+        };
+        choiceDiv.appendChild(btn);
+    });
+    
+    logBox.appendChild(choiceDiv);
+    logBox.scrollTop = logBox.scrollHeight;
+}
+
+function addLog(text, isHighlight, isGolden, customClass) {
+    const div = document.createElement('div');
+    div.className = 'log-item';
+    let content = `<span class="age-tag">${age}岁</span> ${text}`;
+    if (age === -1) content = `<span class="age-tag" style="background:#95a5a6">系统</span> ${text}`;
+    div.innerHTML = content;
+    if (isHighlight) div.classList.add('highlight');
+    if (isGolden) div.classList.add('golden');
+    if (customClass) div.classList.add(customClass);
+    document.getElementById('log-container').appendChild(div);
+}
+
+function resetGame() {
+    switchScreen('screen-start');
+    document.body.className = '';
+    initSetup();
+}
+
+initSetup();
+</script>
+
+</body>
+</html>
