@@ -17,13 +17,13 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - name: Locate preinstalled Android SDK
-        run: |
-          echo "ANDROID_HOME=${ANDROID_HOME}"
-          "$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager" --list_installed | head -50
+      - name: Setup Android SDK tools
+        uses: android-actions/setup-android@v4
+        with:
+          packages: ''
       - name: Install Android 35
         run: |
-          "$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
       - name: Set up Gradle 8.9
         uses: gradle/actions/setup-gradle@v4
         with:
