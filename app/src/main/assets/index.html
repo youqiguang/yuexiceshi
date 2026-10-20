@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f2ee">
+<title>团团 · 一直在你身边</title>
+<style>:root{--ink:#536787;--secondary:#8997af;--blue:#8ca8d8;--accent:#f0b3be;--panel:rgba(255,255,255,.78);--stroke:rgba(255,255,255,.94);--phone-bg:radial-gradient(circle at 58% 27%,#fff9f2 0%,transparent 33%),radial-gradient(circle at 18% 82%,#c7ddf5 0%,transparent 43%),linear-gradient(153deg,#e4eefa 5%,#e6e8fa 46%,#f7dce8 100%)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{position:relative;min-height:100vh;margin:0;overflow-x:hidden;background:#f7f2ee;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink)}body::before{position:fixed;content:"";inset:0;pointer-events:none;background:radial-gradient(circle at 5% 18%,#dae4fb95,transparent 32%),radial-gradient(circle at 95% 40%,#f5deeaab,transparent 38%)}.ambient{position:fixed;z-index:-1;filter:blur(34px);border-radius:50%;opacity:.45}.ambient-a{width:360px;height:360px;background:#d0dffa;left:-190px;bottom:-120px}.ambient-b{width:320px;height:320px;background:#f2cbdc;right:-130px;top:10%}button,input,textarea{font:inherit}button{cursor:pointer;border:0;-webkit-tap-highlight-color:transparent}button:focus-visible,.pet-hit:focus-visible{outline:3px solid #6387ce;outline-offset:3px}.topbar{max-width:1140px;margin:auto;padding:25px 26px 18px;display:flex;align-items:center;justify-content:space-between;position:relative}.brand{display:flex;align-items:center;gap:12px}.logo{width:45px;height:45px;display:grid;place-items:center;border-radius:17px;background:linear-gradient(135deg,#8ca8d6,#c9b2d7);font-weight:900;color:white;font-size:24px;box-shadow:0 8px 18px #9eafd45c}.brand b{display:block;font-size:21px;letter-spacing:1.5px}.brandstar{color:#e4a9ba;font-size:15px}.brand small{display:block;letter-spacing:1.6px;font-size:9px;color:#9daac1;margin-top:3px}.online{padding:9px 13px;background:#fff9;border:1px solid #fff;border-radius:30px;font-size:12px;color:#7b8da9;box-shadow:0 6px 22px #b8b8c023}.online i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#85c3af;margin-right:5px}.online span{color:#e6a3b2;font-size:14px}
+.layout{max-width:1140px;position:relative;margin:2px auto 50px;padding:0 26px;display:grid;grid-template-columns:minmax(320px,430px) minmax(340px,1fr);gap:58px;align-items:start}.preview{position:sticky;top:18px;display:flex;flex-direction:column;align-items:center}.device{--pet-scale:1;position:relative;width:min(100%,390px);height:694px;border:9px solid #fcfcff;overflow:hidden;border-radius:49px;background:var(--phone-bg);box-shadow:0 26px 60px #8a96b53c,0 0 0 1px #c6cce4aa,inset 0 3px 16px #ffffff77}.device:before,.device:after{content:"";pointer-events:none;position:absolute;width:220px;height:220px;border-radius:50%;z-index:0}.device:before{background:#ffffff85;filter:blur(40px);top:255px;right:-80px}.device:after{border:2px solid #ffffff70;top:380px;left:-140px;width:420px;height:300px;transform:rotate(-27deg)}.device[data-theme=peach]{--phone-bg:radial-gradient(circle at 70% 30%,#fff9ef,transparent 36%),linear-gradient(145deg,#ffe9e1,#f7dfe7 54%,#dce6fd)}.device[data-theme=night]{--phone-bg:radial-gradient(circle at 75% 8%,#b9aed966,transparent 45%),linear-gradient(145deg,#777eb3,#b69fc6 65%,#d4b3ce)}.device[data-theme=night] .device-time,.device[data-theme=night] .device-time b{color:#fff}.device[data-theme=night] .device-hint{color:#e8e3f3}.island{position:absolute;z-index:8;left:50%;transform:translateX(-50%);top:0;width:95px;height:21px;border-radius:0 0 16px 16px;background:#fbfcff}.device-time{position:absolute;left:0;right:0;top:63px;text-align:center;z-index:1;display:flex;flex-direction:column;gap:2px;color:#fff;text-shadow:0 2px 17px #7a90bb78}.device-time b{font-weight:270;font-size:62px;letter-spacing:1px}.device-time span{font-size:12px;color:#7286a2;text-shadow:none}.stars{position:absolute;top:158px;right:30px;color:#fff;font-size:20px;letter-spacing:24px;opacity:.85}.stars i{font-size:11px}.glass{background:var(--panel);border:1px solid var(--stroke);backdrop-filter:blur(17px);-webkit-backdrop-filter:blur(17px)}.note{position:absolute;z-index:2;top:187px;left:17px;right:17px;padding:14px 16px;border-radius:19px;display:flex;align-items:center;gap:13px;box-shadow:0 12px 30px #a3acc536}.note-icon{width:35px;height:35px;flex-shrink:0;border-radius:13px;display:grid;place-items:center;font-size:20px;color:#9db2d6;background:#e9f1fc}.note small{font-size:9px;letter-spacing:1.6px;color:#a0aabe}.note b{font-size:14px;color:#687fa5;display:block;margin-top:3px;font-weight:700}.note-heart{margin-left:auto;font-size:24px;color:#e5abbf}.pet-stage{position:absolute;z-index:4;width:62%;height:43%;touch-action:none;transform-origin:center 80%;transform:scale(var(--pet-scale));user-select:none;-webkit-user-select:none}.pet-hit{width:100%;height:100%;display:grid;place-items:center;cursor:grab;touch-action:none;position:relative;z-index:2}.pet-hit:active{cursor:grabbing}.pet-hit img{display:block;pointer-events:none;max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 11px 11px #7e85ac28);transition:opacity .09s linear}.pet-hit img.mirror{transform:scaleX(-1)}.pet-shadow{position:absolute;bottom:5%;left:23%;width:53%;height:12px;border-radius:50%;filter:blur(8px);background:#718ab64d;z-index:1}.speech{position:absolute;left:40%;top:-9px;z-index:7;min-width:94px;max-width:180px;white-space:nowrap;padding:10px 13px;border-radius:19px 19px 19px 4px;box-shadow:0 8px 24px #7b8ca533;background:#fffffff2;border:1px solid #fff;color:#7b8eae;font-size:12px;opacity:0;transform:translateY(9px);transition:opacity .25s,transform .25s;pointer-events:none}.speech.show{opacity:1;transform:translateY(0)}.device-hint{position:absolute;bottom:116px;left:0;right:0;text-align:center;color:#8595ae;font-size:11px;letter-spacing:1.2px;z-index:4}.appdock{position:absolute;bottom:27px;left:21px;right:21px;z-index:5;display:flex;justify-content:space-around;border-radius:24px;padding:11px 6px}.appdock button{width:53px;height:55px;border-radius:18px;background:#ffffffe8;border:1px solid #fff;display:grid;place-items:center;font-size:25px;box-shadow:0 5px 10px #a6b2c839;transition:transform .2s}.appdock button:active{transform:scale(.89)}.home-indicator{position:absolute;bottom:8px;width:100px;height:4px;left:calc(50% - 50px);border-radius:10px;background:#8795b3a3;z-index:7}.under-phone{font-size:11px;color:#a1a9bc;margin:15px auto;text-align:center}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#a2cfb9;margin-right:4px}
+.dashboard{padding-top:22px}.eyebrow{font-size:11px;letter-spacing:3px;font-weight:700;color:#99aac8}.dashboard h1{font-size:38px;line-height:1.4;letter-spacing:.2px;margin:14px 0 9px}.dashboard h1 em{font-style:normal;color:#d99da9}.lead{color:#8997ad;line-height:1.95;font-size:14px;margin:0 0 18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stats>div{background:#ffffffb0;border:1px solid #fff;border-radius:20px;padding:11px 13px 13px;display:grid;grid-template-columns:24px 1fr;column-gap:5px;box-shadow:0 8px 20px #9caec21c}.miniicon{grid-row:span 2;font-size:20px;color:#dea5b5;margin-top:3px}.stats small{font-size:11px;color:#a0a9bd}.stats b{font-size:16px;color:#687ba0}.card{border:1px solid #fff;background:#ffffffb5;backdrop-filter:blur(20px);border-radius:27px;padding:20px 20px 18px;margin-top:16px;box-shadow:0 13px 32px #abb3c21b}.card-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:15px}.card-head h2{font-size:16px;margin:0}.card-head>span{font-size:9px;color:#b1afc1;letter-spacing:1px}.action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.action-grid button{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-height:93px;border:1px solid #ffffff;background:linear-gradient(155deg,#fbfbff,#f0f3fa);border-radius:17px;color:#607798;transition:transform .2s,background .2s,box-shadow .2s}.action-grid button:active{transform:scale(.95);background:#e7eefd}.action-grid i{font-style:normal;font-size:25px}.action-grid strong{font-size:12px}.action-grid small{font-size:10px;color:#9da8bb}.theme-row{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.theme{display:flex;align-items:center;justify-content:center;gap:7px;background:#f9fafde8;border:1px solid #eef0f7;color:#7484a0;padding:10px 4px;border-radius:17px;font-size:12px}.theme.active{border-color:#aebfe7;box-shadow:inset 0 0 0 1px #aebfe7;background:#edf2fd}.themeball{height:19px;width:19px;border-radius:50%;box-shadow:inset -4px -4px 5px #b3b3c633}.themeball.cloud{background:linear-gradient(135deg,#d9ebfe,#b7c6ed)}.themeball.peach{background:linear-gradient(135deg,#fff0d9,#edb4c5)}.themeball.night{background:linear-gradient(135deg,#7780b5,#b59bc7)}.setting-row{margin-top:18px}.setting-row label{font-size:12px;display:flex;justify-content:space-between;color:#7b8ba7}.setting-row output{color:#b9a3bf}.setting-row input{width:100%;accent-color:#9aafd7;margin-top:14px}.toggle-row{display:flex;gap:15px;margin-top:10px;flex-wrap:wrap}.switchline{display:flex;align-items:center;gap:8px;font-size:12px;color:#8392a9}.switchline input{position:absolute;opacity:0}.switch{display:inline-block;width:32px;height:19px;border-radius:20px;background:#ccd3e0;position:relative;transition:background .2s}.switch:before{content:"";position:absolute;top:3px;left:3px;width:13px;height:13px;background:white;border-radius:50%;transition:transform .2s}.switchline input:checked + .switch{background:#9fb6d8}.switchline input:checked + .switch:before{transform:translateX(13px)}.memory p{font-size:11px;color:#8e9eb7;line-height:1.8;margin:0 0 11px}.memory textarea{width:100%;background:#fafcff;border:1px solid #e5ecf5;border-radius:13px;padding:12px;resize:vertical;color:#607392;font-size:12px;line-height:1.8;outline:none}.memory textarea:focus{border-color:#9fb7df}.memory-actions{display:flex;justify-content:space-between;align-items:center;margin-top:5px;font-size:10px;color:#a4acc0}.memory-actions button{background:transparent;color:#bba0b3;font-size:11px;padding:5px}.nativebuttons{display:flex;gap:10px;margin-top:16px}.nativebuttons button{flex:1;padding:15px 12px;border-radius:16px;font-size:12px;font-weight:800}.primary{background:linear-gradient(125deg,#9bb4da,#b4addb);color:white;box-shadow:0 8px 22px #91a9d94d}.secondary{background:#fff9;color:#7689ac;border:1px solid #fff}.limitations{font-size:11px;color:#9cabc2;line-height:1.75;margin:15px 0 0}.toast{position:fixed;bottom:27px;left:50%;transform:translate(-50%,15px);opacity:0;pointer-events:none;z-index:50;background:#627695ef;color:#fff;padding:11px 18px;max-width:90%;font-size:13px;text-align:center;border-radius:40px;box-shadow:0 13px 30px #687ca655;transition:all .24s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:930px){.layout{gap:28px;grid-template-columns:minmax(260px,390px) 1fr}.dashboard h1{font-size:29px}.device{height:665px}.card{padding:17px}}
+@media(max-width:735px){.topbar{padding:18px 15px 13px}.layout{grid-template-columns:1fr;gap:8px;padding:0 13px}.preview{position:relative;top:0}.device{width:min(100%,362px);height:625px;border-width:7px;border-radius:40px}.device-time{top:53px}.device-time b{font-size:53px}.device-time span{font-size:11px}.note{top:155px}.pet-stage{top:39%;height:46%}.device-hint{bottom:101px}.appdock{bottom:23px;padding:8px 4px}.appdock button{height:48px;width:49px;font-size:22px}.dashboard{padding:13px 3px 24px}.dashboard h1{font-size:30px;margin:8px 0}.lead{font-size:13px}.online{font-size:11px;padding:8px 9px}.brand small{font-size:8px}.brand b{font-size:19px}.logo{width:40px;height:40px}.under-phone{margin:11px}.stats b{font-size:14px}.card{margin-top:12px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
+<header class="topbar"><div class="brand"><div class="logo">团</div><div><b>团团 <span class="brandstar">✧</span></b><small>TUANTUAN · YOUR COMPANION</small></div></div><div class="online"><i></i> 陪伴中 <span>♡</span></div></header>
+<main class="layout">
+<section class="preview" aria-label="团团互动手机预览">
+  <div class="device" id="device">
+    <div class="island"></div>
+    <div class="device-time"><b id="clock">10:24</b><span id="today">星期一 · 一起过好今天</span></div>
+    <div class="float-icons stars">✦ <i>✧</i> · ✦</div>
+    <div class="note glass"><span class="note-icon">✉</span><div><small>TUANTUAN'S NOTE</small><b id="noteText">……今天也在。</b></div><span class="note-heart">♡</span></div>
+    <div class="pet-stage" id="petStage" style="left:19%;top:40%">
+      <div class="speech" id="speech" role="status">……嗯。</div>
+      <div class="pet-hit" id="petHit" aria-label="轻点摸头，双击变形，拖动位置，长按睡觉" role="button" tabindex="0"><img id="petSprite" draggable="false" alt="团团金瞳小正太正在陪伴"></div>
+      <div class="pet-shadow"></div>
+    </div>
+    <div class="device-hint">轻点摸头 · 双击变形 · 拖动移动</div>
+    <div class="appdock glass"><button data-action="pat" title="摸头">🤍</button><button data-action="morph" title="变形">🐾</button><button data-action="chat" title="在 ChatGPT 继续聊天">💬</button><button data-action="sleep" title="睡觉">🌙</button></div>
+    <div class="home-indicator"></div>
+  </div>
+  <p class="under-phone"><span class="dot"></span> 24 张实际绘制的逐帧素材 · 双形态互动演示</p>
+</section>
+<section class="dashboard">
+  <div class="eyebrow">✦ A LITTLE MOMENT WITH YOU</div>
+  <h1>你的小小陪伴，<br><em>终于动起来啦。</em></h1>
+  <p class="lead">金发金瞳、安静的无口系小正太。也可以悄悄变成一只奶金色猫团子，走路、睡觉，等你回来。每个动作都用了真正的逐帧图片，而不是单张插画漂浮。💛</p>
+  <div class="stats"><div><span class="miniicon">♡</span><small>好感度</small><b id="affection">0</b></div><div><span class="miniicon">🍮</span><small>点心</small><b id="snacks">0</b></div><div><span class="miniicon">✿</span><small>当前形态</small><b id="shapeLabel">小正太</b></div></div>
+  <article class="card actions"><div class="card-head"><h2>今天陪团团做什么？</h2><span>PLAY TOGETHER</span></div>
+    <div class="action-grid">
+      <button data-action="pat"><i>🤍</i><strong>摸摸头</strong><small>温柔反应</small></button>
+      <button data-action="morph"><i>✨</i><strong>变变身</strong><small>人形 ↔ 猫咪</small></button>
+      <button data-action="walk"><i>🐈</i><strong>散散步</strong><small>猫咪六帧行走</small></button>
+      <button data-action="sleep"><i>🌙</i><strong>睡一会</strong><small>猫咪呼吸</small></button>
+      <button data-action="feed"><i>🍪</i><strong>小点心</strong><small>加一点好感</small></button>
+      <button data-action="chat"><i>💌</i><strong>继续聊天</strong><small>打开 ChatGPT</small></button>
+    </div>
+  </article>
+  <article class="card settings"><div class="card-head"><h2>团团的小房间</h2><span>PERSONALIZE</span></div>
+    <div class="theme-row"><button class="theme active" data-theme="cloud"><span class="themeball cloud"></span> 雾蓝</button><button class="theme" data-theme="peach"><span class="themeball peach"></span> 蜜桃</button><button class="theme" data-theme="night"><span class="themeball night"></span> 星夜</button></div>
+    <div class="setting-row"><label for="sizeSlider">桌宠大小 <output id="sizeLabel">100%</output></label><input id="sizeSlider" type="range" min="70" max="130" value="100"></div>
+    <div class="toggle-row"><label class="switchline">自动散步 <input type="checkbox" id="autoWalk" checked><span class="switch"></span></label><label class="switchline">音效 <input type="checkbox" id="sound"><span class="switch"></span></label></div>
+  </article>
+  <article class="card memory"><div class="card-head"><h2>📖 团团的回忆便签</h2><span>SAVED LOCALLY</span></div>
+    <p>可以写下一句想让团团记得的话。这里只保存在当前设备，<strong>不会自动读取 ChatGPT 的聊天记录</strong>。</p>
+    <textarea id="memoryNote" placeholder="例如：要一直记得，我们一起做过桌面小宠物……" rows="2" maxlength="400"></textarea>
+    <div class="memory-actions"><span id="saveStatus">本地自动保存</span><button id="clearNote">清空便签</button></div>
+  </article>
+  <div class="nativebuttons"><button class="primary" id="startOverlay">✧ 开启安卓桌面悬浮</button><button class="secondary" id="stopOverlay">收起桌宠</button></div>
+  <p class="limitations">安卓安装版可以悬浮在其他 App 上，需允许“显示在其他应用上层”；聊天将打开 ChatGPT 原应用，不会读取聊天记录。</p>
+</section>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<script src="frames.js"></script>
+<script>(()=>{'use strict';
+const animations={
+ human_idle:{count:6,delay:[2450,250,110,150,120,720],loop:true},
+ human_pat:{count:4,delay:[160,190,230,240],loop:false},
+ cat_walk:{count:6,delay:[112,105,102,110,105,105],loop:true},
+ cat_stand:{count:1,delay:[1000],loop:true},
+ cat_sleep:{count:4,delay:[490,570,570,490],loop:true},
+ human_to_cat:{count:4,delay:[190,210,220,260],loop:false},
+ cat_to_human:{count:4,delay:[190,210,220,260],loop:false}
+};
+const key='tuantuan_animated_v4'; let initial={};try{initial=JSON.parse(localStorage.getItem(key))||{}}catch(e){}
+const state=Object.assign({form:'human',sleep:false,affection:0,foods:0,theme:'cloud',size:100,autoWalk:true,sound:false,note:'',x:19,y:40},initial);
+let animation='human_idle',frame=0,last=0,onComplete=null,token=0;let toastTimer=0,speechTimer=0,drag=false,holdTimer=0,down=null,tapTimer=0,lastTap=0,petX=state.x,petY=state.y,autoTimer=0,moveDir=1,moveActive=false;
+const sprite=qs('#petSprite'),stage=qs('#petStage'),device=qs('#device');
+function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch(e){}}
+function file(a,i){return INLINE_FRAMES[a+'_'+String(i+1).padStart(2,'0')]}
+for(const [name,conf] of Object.entries(animations))for(let i=0;i<conf.count;i++){const img=new Image();img.src=file(name,i)}
+function setPicture(){sprite.src=file(animation,frame);sprite.classList.toggle('mirror',state.form==='cat'&&moveDir<0 &&animation==='cat_walk')}
+function play(name,callback){animation=name;frame=0;last=performance.now();onComplete=callback||null;token++;setPicture()}
+function nextFrame(now){const cur=animations[animation];if(!cur){requestAnimationFrame(nextFrame);return}
+ if(now-last>=cur.delay[frame]){last=now;frame++;if(frame>=cur.count){if(!cur.loop){const done=onComplete;onComplete=null;if(done){done();requestAnimationFrame(nextFrame);return}frame=cur.count-1}else frame=0}setPicture()}
+ if(animation==='cat_walk'&&moveActive&&!drag){const w=device.clientWidth,s=stage.clientWidth;petX+=moveDir*.33;
+  if(petX*w/100>=w-s-13){moveDir=-1;petX=Math.min(petX,100*(w-s-13)/w)}
+  if(petX*w/100<=11){moveDir=1;petX=100*11/w}
+  stage.style.left=petX+'%';sprite.classList.toggle('mirror',moveDir<0)
+ }requestAnimationFrame(nextFrame)}
+function pauseMotion(){moveActive=false;clearTimeout(autoTimer)}
+function scheduleWalk(){clearTimeout(autoTimer);if(!state.autoWalk||state.form!=='cat'||state.sleep)return;autoTimer=setTimeout(()=>{if(state.form==='cat'&&!state.sleep&&!drag){play('cat_walk');moveActive=true;autoTimer=setTimeout(()=>{if(state.form==='cat'&&!state.sleep){moveActive=false;play('cat_stand');scheduleWalk()}},3400)}},2000)}
+function update(){device.dataset.theme=state.theme;qs('#affection').textContent=state.affection;qs('#snacks').textContent=state.foods;qs('#shapeLabel').textContent=state.form==='human'?'小正太':'奶金猫';qs('#sizeLabel').textContent=state.size+'%';qs('#sizeSlider').value=state.size;qs('#autoWalk').checked=state.autoWalk;qs('#sound').checked=state.sound;qs('#memoryNote').value=state.note;qs('#noteText').textContent=state.sleep?'……晚安。':state.affection>12?'……欢迎回来。':'……今天也在。';stage.style.setProperty('--pet-scale',state.size/100);stage.style.left=petX+'%';stage.style.top=petY+'%';if(window.Android?.saveSettings)window.Android.saveSettings(state.form,state.size,state.autoWalk);qsa('[data-theme]').forEach(x=>x.classList.toggle('active',x.dataset.theme===state.theme));save()}
+function toast(s){const el=qs('#toast');el.textContent=s;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2700)}
+function say(s){const el=qs('#speech');el.textContent=s;el.classList.add('show');clearTimeout(speechTimer);speechTimer=setTimeout(()=>el.classList.remove('show'),2600)}
+function noise(){if(!state.sound)return;try{const ctx=new (window.AudioContext||window.webkitAudioContext)(),o=ctx.createOscillator(),gain=ctx.createGain();o.type='sine';o.frequency.value=720;o.frequency.exponentialRampToValueAtTime(500,ctx.currentTime+.17);gain.gain.setValueAtTime(.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.035,ctx.currentTime+.017);gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.19);o.connect(gain);gain.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.19);setTimeout(()=>ctx.close(),350)}catch(e){}}
+function idle(){pauseMotion();play(state.form==='human'?'human_idle':state.sleep?'cat_sleep':'cat_stand');if(state.form==='cat'&&!state.sleep) scheduleWalk()}
+function morph(to){if(animation==='human_to_cat'||animation==='cat_to_human')return;pauseMotion();state.sleep=false;
+ if(to==='cat'){state.form='human';play('human_to_cat',()=>{state.form='cat';state.sleep=false;update();say('……喵。');idle()})}
+ else{state.form='cat';play('cat_to_human',()=>{state.form='human';state.sleep=false;update();say('……回来了。');idle()})}
+ noise()}
+function action(a){if(animation==='human_to_cat'||animation==='cat_to_human')return;switch(a){case 'pat':
+ if(state.form==='human'){pauseMotion();state.affection++;state.sleep=false;play('human_pat',()=>{say(state.affection%4===0?'……还要。':'……嗯。');idle()})}
+ else{state.affection++;state.sleep=false;pauseMotion();play('cat_stand');say('喵。');scheduleWalk()}
+ noise();break;
+ case 'morph':morph(state.form==='human'?'cat':'human');break;
+ case 'walk': if(state.form==='human'){morph('cat');setTimeout(()=>{if(state.form==='cat'){state.sleep=false;idle();say('……出发。')}},1000)}else{state.sleep=false;idle();say('……出发。')}break;
+ case 'sleep': if(state.form==='human'){morph('cat');setTimeout(()=>{state.sleep=true;idle();say('……晚安。');update()},1050)}else{state.sleep=!state.sleep;idle();say(state.sleep?'……晚安。':'……醒了。')}noise();break;
+ case 'feed':state.foods++;state.affection+=2;say('……谢谢。');noise();break;
+ case 'chat': if(window.Android&&typeof window.Android.openChat==='function')window.Android.openChat();else {toast('正在打开 ChatGPT，原来的聊天记录仍在官方 App 里。');window.open('https://chatgpt.com/','_blank','noopener,noreferrer')}return;
+ }update()}
+qsa('[data-action]').forEach(btn=>btn.addEventListener('click',()=>action(btn.dataset.action)));
+qsa('[data-theme]').forEach(btn=>btn.addEventListener('click',()=>{state.theme=btn.dataset.theme;noise();update()}));
+qs('#sizeSlider').addEventListener('input',e=>{state.size=+e.target.value;update()});qs('#autoWalk').addEventListener('change',e=>{state.autoWalk=e.target.checked;idle();update()});qs('#sound').addEventListener('change',e=>{state.sound=e.target.checked;update();noise()});
+qs('#memoryNote').addEventListener('input',e=>{state.note=e.target.value;save();qs('#saveStatus').textContent='♡ 已保存到本机'});
+qs('#clearNote').addEventListener('click',()=>{state.note='';update();qs('#saveStatus').textContent='便签已清空'});
+qs('#startOverlay').addEventListener('click',()=>{if(window.Android?.startPet)window.Android.startPet();else toast('网页只能试玩。要跨应用悬浮，请安装安卓工程编译的 APK。')});qs('#stopOverlay').addEventListener('click',()=>{if(window.Android?.stopPet)window.Android.stopPet();else toast('网页里没有开启系统悬浮窗哦。')});
+const hit=qs('#petHit');
+hit.addEventListener('pointerdown',e=>{if(down)return;down={x:e.clientX,y:e.clientY,left:stage.offsetLeft,top:stage.offsetTop,start:Date.now()};drag=false;hit.setPointerCapture(e.pointerId);clearTimeout(holdTimer);holdTimer=setTimeout(()=>{if(down&&!drag){down.long=true;action('sleep')}},720)});
+hit.addEventListener('pointermove',e=>{if(!down)return;let dx=e.clientX-down.x,dy=e.clientY-down.y;if(Math.abs(dx)+Math.abs(dy)>9){drag=true;clearTimeout(holdTimer);pauseMotion()}
+ if(drag){const r=device.getBoundingClientRect();const maxLeft=r.width-stage.offsetWidth-6,maxTop=r.height-stage.offsetHeight-86;petX=100*Math.min(Math.max(4,down.left+dx),Math.max(4,maxLeft))/r.width;petY=100*Math.min(Math.max(190,down.top+dy),Math.max(195,maxTop))/r.height;stage.style.left=petX+'%';stage.style.top=petY+'%'}});
+hit.addEventListener('pointerup',e=>{if(!down)return;clearTimeout(holdTimer);const was=down;down=null;if(drag){save();if(state.form==='cat'&&!state.sleep)idle();return}if(was.long)return;let when=Date.now();if(when-lastTap<370){clearTimeout(tapTimer);lastTap=0;action('morph')}else{lastTap=when;tapTimer=setTimeout(()=>action('pat'),380)}});
+hit.addEventListener('pointercancel',()=>{down=null;drag=false;clearTimeout(holdTimer)});
+hit.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();action('pat')}if(e.key.toLowerCase()==='m')action('morph')});
+const t=new Date();qs('#clock').textContent=t.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',hour12:false});qs('#today').textContent=t.toLocaleDateString('zh-CN',{weekday:'long',month:'long',day:'numeric'});
+// Page in the app may not be visible while the overlay is on other apps, so don't pretend to sync positions across windows.
+update();idle();requestAnimationFrame(nextFrame);setTimeout(()=>say('……在。'),850);
+})();
+</script>
+</body></html>

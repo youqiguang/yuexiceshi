@@ -1,0 +1,34 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<style>*{box-sizing:border-box}html,body{margin:0;padding:0;width:100%;height:100%;background:transparent!important;overflow:hidden;-webkit-tap-highlight-color:transparent}
+#pet{position:absolute;top:2%;left:0;width:100%;height:95%;object-fit:contain;pointer-events:none;filter:drop-shadow(0 5px 5px #8191b433)}
+#pet.flipped{transform:scaleX(-1)}
+#chat{position:absolute;right:2px;top:2px;display:grid;place-items:center;width:38px;height:38px;border-radius:40px;background:#fff9f6ed;font-size:17px;box-shadow:0 3px 10px #8da0bd44;pointer-events:none}
+#bubble{position:absolute;left:50%;bottom:1px;transform:translateX(-50%);opacity:0;background:#fffffff0;box-shadow:0 1px 6px #8197ac30;border-radius:18px;padding:4px 9px;color:#71839f;font-size:11px;white-space:nowrap;pointer-events:none}
+#bubble.on{opacity:1}</style></head><body><img id="pet" alt="团团"><span id="chat">💬</span><div id="bubble"></div>
+<script src="frames.js"></script><script>
+(()=>{'use strict';
+const duration={human_idle:[2400,240,110,160,110,640],human_pat:[150,170,230,240],cat_stand:[1600],cat_walk:[125,115,110,125,115,110],cat_sleep:[500,580,580,500],human_to_cat:[180,190,200,250],cat_to_human:[180,190,200,250]};
+const counts={human_idle:6,human_pat:4,cat_stand:1,cat_walk:6,cat_sleep:4,human_to_cat:4,cat_to_human:4};
+const picture=document.getElementById('pet'),bubble=document.getElementById('bubble');
+let form='human',asleep=false,flipped=false,group='human_idle',idx=0,last=0,callback=null;
+const getFrame=(name,i)=>INLINE_FRAMES[name+'_'+String(i+1).padStart(2,'0')];
+for(const [n,c] of Object.entries(counts))for(let i=0;i<c;i++){const image=new Image();image.src=getFrame(n,i)}
+function render(){picture.src=getFrame(group,idx);picture.classList.toggle('flipped',flipped&&group==='cat_walk')}
+function play(name,done){group=name;idx=0;last=performance.now();callback=done||null;render()}
+function select(){play(form==='human'?'human_idle':asleep?'cat_sleep':'cat_walk')}
+function speak(s){bubble.textContent=s;bubble.classList.add('on');clearTimeout(window.fade);window.fade=setTimeout(()=>bubble.classList.remove('on'),1450)}
+function loop(t){if(t-last>=duration[group][idx]){last=t;idx++;if(idx>=counts[group]){if(callback){const cb=callback;callback=null;cb();requestAnimationFrame(loop);return}idx=0}render()}requestAnimationFrame(loop)}
+window.petControl=function(cmd){
+ if(cmd==='pat'){if(form==='human'){asleep=false;play('human_pat',select);speak('……嗯。')}else{asleep=false;play('cat_walk');speak('喵。')}}
+ if(cmd==='transform'){if(group==='human_to_cat'||group==='cat_to_human')return;
+ if(form==='human')play('human_to_cat',()=>{form='cat';asleep=false;select();speak('……喵。')});
+ else play('cat_to_human',()=>{form='human';asleep=false;select();speak('……回来了。')})}
+ if(cmd==='sleep'){if(form==='human')play('human_to_cat',()=>{form='cat';asleep=true;select();speak('……晚安。')});else{asleep=!asleep;select();speak(asleep?'……晚安。':'……醒了。')}}
+ if(cmd==='walk'){asleep=false;if(form==='human')play('human_to_cat',()=>{form='cat';select()});else select()}
+ return true;
+};
+window.setInitial=function(value){form=value==='cat'?'cat':'human';asleep=false;select()};
+window.setFacing=function(left){flipped=left;render()};
+select();requestAnimationFrame(loop);
+})();
+</script></body></html>
