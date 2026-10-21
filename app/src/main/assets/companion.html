@@ -77,7 +77,7 @@ window.fromNative=function(type,data){
  if(type==='error'){toast(data);mood('……没关系，再试一次。')}
  if(type==='speech'){input.value=data;input.focus();send()}
  if(type==='ready'){sending=false;progress.classList.remove('on');$('send').disabled=false}
- if(type==='saved'){toast(data);$('providerSecret').value='';$('voiceSecret').value='';$('secret')?.value='';if(!data.includes('失败'))mood('……已经保存。')}
+ if(type==='saved'){toast(data);$('providerSecret').value='';$('voiceSecret').value='';if(!data.includes('失败'))mood('……已经保存。')}
  if(type==='cleared'){messages.innerHTML='';toast('团团的本地聊天记录已清空。')}
 };
 try{settings=JSON.parse(Native.init())}catch(e){settings={connected:false,history:[],hearts:0,form:'human',tts:true,memory:''}}
