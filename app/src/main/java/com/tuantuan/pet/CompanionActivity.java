@@ -266,6 +266,11 @@ public final class CompanionActivity extends Activity {
         @JavascriptInterface public void addHeart() {
             prefs.edit().putInt("hearts",prefs.getInt("hearts",0)+1).apply();
         }
+        @JavascriptInterface public void previewVoice() {
+            runOnUiThread(() -> {
+                if(tts!=null) tts.speak("……我在。今天想聊些什么？",TextToSpeech.QUEUE_FLUSH,null,"tuan_preview");
+            });
+        }
         @JavascriptInterface public void recognize() {
             runOnUiThread(() -> {
                 Intent i=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
