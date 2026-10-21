@@ -253,7 +253,7 @@ public final class CompanionActivity extends Activity {
         }
         @JavascriptInterface public void setMemory(String text) {
             prefs.edit().putString("memory",text.length()>1200?text.substring(0,1200):text).apply();
-            event("saved","便签已仅保存在手机上。");
+            event("saved","便签已保存在手机。开始聊天后，它会随消息发送到 OpenAI API。");
         }
         @JavascriptInterface public void setSpeak(boolean v) {
             readAloud=v;prefs.edit().putBoolean("tts",v).apply();
