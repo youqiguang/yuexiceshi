@@ -315,7 +315,7 @@ public final class CompanionActivity extends Activity {
                     conn.setRequestMethod("POST");conn.setConnectTimeout(12000);conn.setReadTimeout(20000);
                     conn.setDoOutput(true);conn.setRequestProperty("Content-Type","application/json");
                     conn.setRequestProperty("Authorization","Bearer "+secret);
-                    try(OutputStream out=conn.getOutputStream())out.write(body.toString().getBytes(StandardCharsets.UTF_8));
+                    try(OutputStream out=conn.getOutputStream()){out.write(body.toString().getBytes(StandardCharsets.UTF_8));}
                     int status=conn.getResponseCode();
                     if(status>=400)throw new Exception("接口返回 HTTP "+status+"，请检查地址、模型、接口格式或站点余额。");
                     String payload=readStream(conn.getInputStream());
