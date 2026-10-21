@@ -9,14 +9,14 @@
     <application android:theme="@android:style/Theme.Material.Light.NoActionBar"
                  android:label="@string/app_name" android:usesCleartextTraffic="false"
                  android:allowBackup="false" android:supportsRtl="true">
-      <activity android:name=".CompanionActivity" android:exported="false" android:windowSoftInputMode="adjustResize"/>
-      <activity android:name=".MainActivity" android:exported="true">
+      <activity android:name="com.tuantuan.pet.CompanionActivity" android:exported="false" android:windowSoftInputMode="adjustResize"/>
+      <activity android:name="com.tuantuan.pet.MainActivity" android:exported="true">
         <intent-filter>
           <action android:name="android.intent.action.MAIN"/>
           <category android:name="android.intent.category.LAUNCHER"/>
         </intent-filter>
       </activity>
-      <service android:name=".PetService" android:exported="false"
+      <service android:name="com.tuantuan.pet.PetService" android:exported="false"
                android:foregroundServiceType="specialUse">
         <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                   android:value="User-started persistent interactive floating character"/>
