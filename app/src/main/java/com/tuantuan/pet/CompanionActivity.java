@@ -288,6 +288,74 @@ public final class CompanionActivity extends Activity {
             event("providers",providers.summary().toString());
             event("saved","独立语音接口密钥已清除。");
         }
+        @JavascriptInterface public void testConnection() {
+            if(waiting){event("error","上一条消息还在处理，请稍后再试。");return;}
+            final String secret=providers.key();
+            final String model=providers.activeModel();
+            final String mode=providers.activeMode();
+            final String target;
+            try{target=providers.activeUrl();}catch(Exception e){event("error",e.getMessage());return;}
+            if(secret.isEmpty()||model.trim().isEmpty()){
+                event("error","请先保存并启用包含密钥和模型 ID 的服务商配置。");return;
+            }
+            waiting=true;
+            event("testResult","正在连接 "+providers.name(providers.activeId())+"……");
+            executor.execute(()->{
+                HttpURLConnection conn=null;
+                try{
+                    JSONObject body=new JSONObject().put("model",model);
+                    if("chat".equals(mode)){
+                        JSONArray messages=new JSONArray().put(new JSONObject().put("role","user").put("content","Reply with OK."));
+                        body.put("messages",messages);
+                    }else{
+                        body.put("input","Reply with OK.");
+                        body.put("max_output_tokens",20);
+                    }
+                    conn=(HttpURLConnection)new URL(target).openConnection();
+                    conn.setRequestMethod("POST");conn.setConnectTimeout(12000);conn.setReadTimeout(20000);
+                    conn.setDoOutput(true);conn.setRequestProperty("Content-Type","application/json");
+                    conn.setRequestProperty("Authorization","Bearer "+secret);
+                    try(OutputStream out=conn.getOutputStream())out.write(body.toString().getBytes(StandardCharsets.UTF_8));
+                    int status=conn.getResponseCode();
+                    if(status>=400)throw new Exception("接口返回 HTTP "+status+"，请检查地址、模型、接口格式或站点余额。");
+                    String payload=readStream(conn.getInputStream());
+                    String answer="chat".equals(mode)?extractChat(new JSONObject(payload)):extractResponse(new JSONObject(payload));
+                    event("testResult",answer.isEmpty()?"✓ 接口返回 200，但回复为空：可能需要调整协议或模型参数。":"✓ 连接成功！模型已正常返回内容。");
+                }catch(Exception e){
+                    event("testResult","✕ 连接失败："+(e.getMessage()==null?"网络错误":e.getMessage()));
+                }finally{
+                    if(conn!=null)conn.disconnect();
+                    waiting=false;
+                }
+            });
+        }
+        @JavascriptInterface public void fetchModels() {
+            final String secret=providers.key();
+            if(secret.isEmpty()){event("error","请先保存该服务商的密钥，再拉取模型列表。");return;}
+            executor.execute(()->{
+                HttpURLConnection conn=null;
+                try{
+                    String url=ApiProfiles.sanitizeBase(providers.base(providers.activeId()))+"/models";
+                    conn=(HttpURLConnection)new URL(url).openConnection();
+                    conn.setRequestMethod("GET");conn.setConnectTimeout(12000);conn.setReadTimeout(18000);
+                    conn.setRequestProperty("Authorization","Bearer "+secret);
+                    int status=conn.getResponseCode();
+                    if(status>=400)throw new Exception("HTTP "+status+"。很多中转站未提供 /models，请向服务商获取模型 ID。");
+                    JSONObject body=new JSONObject(readStream(conn.getInputStream()));
+                    JSONArray models=body.optJSONArray("data");
+                    if(models==null)throw new Exception("站点返回的数据不含 data 模型列表。");
+                    JSONArray safe=new JSONArray();
+                    for(int i=0;i<models.length()&&safe.length()<80;i++){
+                        JSONObject item=models.optJSONObject(i);
+                        if(item==null)continue;
+                        String name=item.optString("id","");
+                        if(!name.isEmpty()&&name.length()<140)safe.put(name);
+                    }
+                    event("modelList",safe.toString());
+                }catch(Exception e){event("error","模型拉取失败："+e.getMessage());}
+                finally{if(conn!=null)conn.disconnect();}
+            });
+        }
         @JavascriptInterface public void setMemory(String text) {
             prefs.edit().putString("memory",text.length()>1200?text.substring(0,1200):text).apply();
             event("saved","便签已保存在手机。开始聊天后，它会随消息发送到 OpenAI API。");
