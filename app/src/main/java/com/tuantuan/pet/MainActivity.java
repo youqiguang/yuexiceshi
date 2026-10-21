@@ -31,7 +31,7 @@ public final class MainActivity extends Activity {
         page.addJavascriptInterface(new Bridge(), "Android");
         page.setWebViewClient(new WebViewClient() {
             @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith("https://chatgpt.com")) { openChat(); return true; }
+                if (url.startsWith("https://chatgpt.com")) { openOfficial(); return true; }
                 return !url.startsWith("file:///android_asset/");
             }
         });
@@ -47,7 +47,10 @@ public final class MainActivity extends Activity {
             runOnUiThread(() -> { stopService(new Intent(MainActivity.this, PetService.class)); message("团团已经休息啦"); });
         }
         @JavascriptInterface public void openChat() {
-            runOnUiThread(() -> MainActivity.this.openChat());
+            runOnUiThread(() -> MainActivity.this.openPetChat());
+        }
+        @JavascriptInterface public void openOfficial() {
+            runOnUiThread(() -> MainActivity.this.openOfficial());
         }
         @JavascriptInterface public void saveSettings(String form, int size, boolean walk) {
             SharedPreferences prefs = getSharedPreferences("tuan_settings", MODE_PRIVATE);
@@ -95,7 +98,10 @@ public final class MainActivity extends Activity {
             message("启动失败，请检查悬浮窗权限与省电设置");
         }
     }
-    private void openChat() {
+    private void openPetChat() {
+        startActivity(new Intent(this,CompanionActivity.class));
+    }
+    private void openOfficial() {
         Intent i = getPackageManager().getLaunchIntentForPackage("com.openai.chatgpt");
         if (i == null) i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://chatgpt.com/"));
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
