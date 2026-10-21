@@ -21,7 +21,7 @@
 <label for="secret">OpenAI API Key（仅填你自己的）</label><input type="password" id="secret" placeholder="sk-..." autocomplete="off" spellcheck="false"><div class="two"><button class="primary" id="saveKey">🔒 保存并连接</button><button id="removeKey">删除密钥</button></div>
 <div class="note">密钥使用 Android Keystore 加密保存于本机，不会写进 APK 或 GitHub。你发送的消息、最近的聊天上下文与记忆便签会随请求提交给 OpenAI API。API 使用费用与 ChatGPT Plus 分开计费；此版本为个人体验，正式分发时应使用自己的服务端代理，避免移动端直接保管 API Key。</div>
 <label for="memo">📖 团团的回忆便签（自愿填写）</label><textarea id="memo" maxlength="1200" placeholder="例如：我们一起做过桌面宠物；我希望从零开始学习 AI。"></textarea><div class="two"><button id="saveMemo">保存回忆便签</button><button id="clearChat">清空桌宠聊天</button></div>
-<label>语音设置</label><div class="check"><input type="checkbox" id="tts" checked><span>朗读团团的回答（使用手机系统声音）</span></div>
+<label>语音设置</label><div class="two"><button id="voicePreview">🔉 试听团团的声音</button></div><div class="check"><input type="checkbox" id="tts" checked><span>朗读团团的回答（使用手机系统声音）</span></div>
 <p style="margin-top:16px">语音采用「按键识别 → AI 文字回复 → 手机语音朗读」，不是 ChatGPT 官方实时语音模式。系统语音识别可能由设备厂商的在线服务处理声音。语音识别效果和发音依赖系统服务。</p>
 </div></div>
 <script>
@@ -65,6 +65,7 @@ $('removeKey').onclick=()=>Native.removeApiKey();
 $('saveMemo').onclick=()=>Native.setMemory($('memo').value);
 $('clearChat').onclick=()=>{if(confirm('确认清空这只桌宠保存的聊天记录吗？'))Native.clearHistory()};
 $('tts').onchange=e=>Native.setSpeak(e.target.checked);
+$('voicePreview').onclick=()=>Native.previewVoice();
 document.querySelectorAll('[data-q]').forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.q;send()}));
 avatar.onclick=()=>{hearts++;$('heartPill').textContent='♡ '+hearts;Native.addHeart();mood(hearts%7===0?'……有点痒。':'……嗯。');
 const heart=document.createElement('div');heart.textContent='♡';heart.className='floating-heart';document.querySelector('.scene').appendChild(heart);setTimeout(()=>heart.remove(),900);
