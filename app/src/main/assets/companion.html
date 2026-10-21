@@ -1,0 +1,74 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f9f4ef"><title>团团 · 小小聊天屋</title>
+<style>
+:root{--ink:#4f5876;--muted:#9293ab;--blue:#8ea6df;--pink:#f3bbc8;--line:#efe6e9;--paper:#fffcfa;--shadow:0 18px 50px #a09bbd24}*{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:"Noto Sans SC","PingFang SC",system-ui,sans-serif;background:linear-gradient(145deg,#f9f3ef 0%,#f4f2fb 56%,#eef4ff 100%);color:var(--ink);overflow:hidden}.bg-glow{position:fixed;border-radius:50%;filter:blur(38px);pointer-events:none}.bg-glow.a{top:-85px;right:-55px;width:270px;height:280px;background:#ffe1e0af}.bg-glow.b{bottom:-65px;left:-90px;width:240px;height:220px;background:#cfddffaa}.app{height:100%;height:100dvh;max-width:720px;margin:auto;display:flex;flex-direction:column;position:relative;z-index:1}
+.header{padding:12px 16px 8px;display:flex;align-items:center;gap:10px}.back,.icon{border:1px solid #ffffffec;background:#ffffffa8;box-shadow:0 4px 14px #acb4c31c;color:#7b8ba8;border-radius:14px;width:39px;height:39px;font-size:18px}.title{flex:1;line-height:1.3}.title b{font-size:17px;letter-spacing:.8px}.title small{display:block;font-size:10px;letter-spacing:2.2px;color:#9da3b8}.tag{font-size:10px;font-weight:700;color:#74ad99;display:flex;align-items:center;gap:5px}.tag::before{content:"";width:6px;height:6px;background:#91cbb1;border-radius:50%;box-shadow:0 0 0 3px #dcf3e8}
+.scene{position:relative;height:196px;min-height:175px;margin:0 14px 10px;border:1px solid #fff;overflow:hidden;border-radius:28px;background:radial-gradient(circle at 51% 95%,#e1e8f9 0%,transparent 48%),linear-gradient(120deg,#fff5f5e9,#eef3ffec);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center}.scene:before{content:"";position:absolute;width:190px;height:170px;border-radius:50%;background:#fff9f1bb;filter:blur(22px);bottom:-70px;left:calc(50% - 90px)}.star{position:absolute;color:#d8b56c;opacity:.75;pointer-events:none;font-size:22px}.star.one{top:18px;left:16%}.star.two{right:18%;top:49px;font-size:15px}.star.three{right:10%;bottom:27px;font-size:20px}.scene img{width:165px;height:183px;object-fit:contain;z-index:1;filter:drop-shadow(0 7px 9px #9aa7b52c);animation:float 4s ease-in-out infinite;user-select:none;-webkit-user-drag:none}.scene .small-label{position:absolute;left:14px;top:13px;font-size:9px;letter-spacing:1.7px;color:#a0a3b9;font-weight:750}.scene .bubble{position:absolute;right:16px;top:14px;border:1px solid #fff;background:#ffffffba;box-shadow:0 5px 14px #c4acc820;border-radius:13px;padding:9px 12px;max-width:132px;color:#8d829f;font-size:11px;line-height:1.6;z-index:2}.form-pill{position:absolute;bottom:12px;left:15px;background:#ffffffb5;padding:7px 10px;border-radius:20px;border:1px solid #fff;font-size:11px;color:#8e9cb6;z-index:2}.heart-pill{position:absolute;bottom:12px;right:14px;border-radius:20px;background:#fff8fafa;padding:7px 11px;font-size:11px;color:#cc839c;border:1px solid #fff}.floating-heart{position:absolute;z-index:4;bottom:45px;left:54%;font-size:22px;animation:rise .85s ease-out both;pointer-events:none}@keyframes rise{to{transform:translateY(-65px) scale(1.3);opacity:0}}@keyframes float{50%{transform:translateY(-4px)}}
+.quick{display:flex;gap:8px;overflow-x:auto;padding:1px 16px 10px;scrollbar-width:none}.quick::-webkit-scrollbar{display:none}.quick button{flex:none;border:1px solid #fff;border-radius:19px;background:#fffcffdc;box-shadow:0 3px 12px #acb2d11f;font-size:11px;color:#7889ac;padding:9px 12px;font-weight:650}
+.chat{margin:0 14px;min-height:0;display:flex;flex:1;flex-direction:column;border-radius:26px 26px 0 0;border:1px solid #ffffffed;border-bottom:0;background:#fffafbed;box-shadow:0 -7px 30px #b9abbd23}.chat-head{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f4eaf0;font-size:11px;color:#ac9daf;letter-spacing:.2px}.chat-head b{color:#8285a3;font-size:12px}.messages{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:14px 12px 9px;display:flex;flex-direction:column;gap:12px}.msg{max-width:88%;padding:11px 14px;border-radius:18px;line-height:1.75;font-size:13px;white-space:pre-wrap;word-break:break-word;box-shadow:0 4px 14px #c1beca12}.msg.assistant{align-self:flex-start;background:#f1f5ff;border:1px solid #e9effb;border-bottom-left-radius:5px;color:#616f8c}.msg.user{align-self:flex-end;background:#fce9ee;border:1px solid #fbe3e9;border-bottom-right-radius:5px;color:#8d6881}.msg.system{align-self:center;max-width:97%;font-size:11px;text-align:center;background:#fff8e9;border:1px solid #f6e9d2;border-radius:12px;color:#978f80}.progress{display:none;margin:0 14px 8px;color:#9ca8c0;font-size:11px}.progress.on{display:block}.composer{background:#fffcffed;border-top:1px solid #f3e7ee;padding:10px 10px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:end;gap:8px}.composer textarea{border:1px solid #ebe7ee;border-radius:16px;background:#fff;outline:none;resize:none;height:44px;max-height:115px;flex:1;font:13px/1.5 inherit;padding:11px;color:var(--ink)}.composer textarea:focus{border-color:#c3cdea}.circle{border:none;border-radius:15px;width:44px;height:44px;flex:none;display:grid;place-items:center;font-size:18px;background:#eff4ff;color:#8a9ecb}.circle.send{background:linear-gradient(130deg,#eaaabf,#c2abdd);color:white;box-shadow:0 5px 14px #d9add069}.footer-help{padding:5px 14px;font-size:10px;color:#adb1be;background:#ffffffaf;text-align:center}
+.overlay{position:fixed;z-index:15;inset:0;background:#5a55637a;display:none;align-items:flex-end}.overlay.visible{display:flex}.sheet{width:100%;max-width:720px;margin:auto;background:#fffaf9;border-radius:27px 27px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom));max-height:87dvh;overflow:auto;box-shadow:0 -10px 45px #4c4c713e}.sheet .row{display:flex;align-items:center;justify-content:space-between;gap:10px}.sheet h2{margin:0 0 8px;color:#636884;font-size:18px}.sheet p{line-height:1.7;font-size:12px;color:#9293a8}.sheet label{display:block;margin:18px 0 8px;font-weight:700;font-size:12px;color:#65708a}.sheet input[type=password],.sheet textarea{width:100%;border:1px solid #e7deea;background:white;border-radius:15px;padding:13px;color:#515f7a;font:13px inherit;outline:none}.sheet textarea{height:86px;resize:vertical}.sheet button{border:0;border-radius:12px;padding:11px 13px;font-weight:700;background:#edf1fc;color:#7b8bb2;font-size:12px}.sheet .primary{background:#9bb1e2;color:white}.pill{display:inline-block;font-size:10px;border-radius:20px;padding:5px 9px;background:#f3f7ff;color:#8197bb}.check{display:flex;gap:9px;align-items:center;font-size:13px}.two{display:flex;gap:8px;margin-top:9px}.two button{flex:1}.note{margin-top:10px;padding:10px;border-radius:12px;background:#fff3e7;font-size:11px;color:#a19083;line-height:1.65}
+@media(max-height:710px){.scene{height:148px;min-height:145px}.scene img{height:142px;width:135px}.scene .bubble{font-size:10px}.scene .small-label{display:none}.quick{padding-bottom:7px}.header{padding-top:5px}}
+@media(min-width:730px){.scene{height:230px}.chat{max-height:50vh}}
+</style></head>
+<body><div class="bg-glow a"></div><div class="bg-glow b"></div><div class="app">
+<header class="header"><button class="back" id="back" aria-label="返回桌宠">‹</button><div class="title"><b>团团的小小聊天屋 ♡</b><small>TUANTUAN · COMPANION</small></div><span class="tag">一直在这里</span><button class="icon" id="config" aria-label="设置">⚙</button></header>
+<section class="scene"><span class="small-label">A LITTLE MOMENT WITH YOU</span><span class="star one">✦</span><span class="star two">✧</span><span class="star three">✧</span><div class="bubble" id="statusBubble">……今天也陪着你。</div><img id="avatar" alt="团团的金发金瞳人物形象"><span class="form-pill" id="formPill">轻点团团 · 摸摸头</span><span class="heart-pill" id="heartPill">♡ 0</span></section>
+<div class="quick"><button data-q="和我聊聊天吧">☁️ 陪我聊天</button><button data-q="来教我一个英语考研词汇吧，先解释再考我">📚 背单词</button><button data-q="给我讲一点有趣的人工智能原理，适合零基础">🤖 学习AI</button><button data-q="给我一个放松的小活动">🍵 休息一下</button><button id="official">💬 原来的 ChatGPT ↗</button></div>
+<main class="chat"><div class="chat-head"><b>✉ 只属于此桌宠的对话</b><span>文字 + 语音输入 + 朗读回复</span></div><div class="messages" id="messages"></div><div class="progress" id="progress">✧ 团团正在认真想……</div>
+<div class="composer"><button class="circle" id="voice" aria-label="语音输入">🎙</button><textarea id="input" placeholder="想和团团说什么呀……" rows="1" maxlength="1800"></textarea><button class="circle send" id="send" aria-label="发送">➤</button></div></main>
+<div class="footer-help">不会读取原 ChatGPT 会话 · 语音识别由系统提供 · 按下麦克风才开始收音</div></div>
+<div class="overlay" id="overlay"><div class="sheet"><div class="row"><h2>团团的秘密小房间 ✦</h2><button id="closeSheet">收起 ✕</button></div><p>连接独立的 OpenAI API 后，桌宠才可以智能聊天。它不会自动拥有原本 ChatGPT 的聊天记录或记忆。若想继续以前的聊天，请使用「原来的 ChatGPT」。</p><div class="row"><b style="font-size:12px;color:#717d9e">连接状态</b><span class="pill" id="keyStatus">未连接</span></div>
+<label for="secret">OpenAI API Key（仅填你自己的）</label><input type="password" id="secret" placeholder="sk-..." autocomplete="off" spellcheck="false"><div class="two"><button class="primary" id="saveKey">🔒 保存并连接</button><button id="removeKey">删除密钥</button></div>
+<div class="note">密钥使用 Android Keystore 加密保存于本机，不会写进 APK 或 GitHub。API 使用费用与 ChatGPT Plus 分开计费；此版本为个人体验，正式分发时应使用自己的服务端代理，避免移动端直接保管 API Key。</div>
+<label for="memo">📖 团团的回忆便签（自愿填写）</label><textarea id="memo" maxlength="1200" placeholder="例如：我们一起做过桌面宠物；我希望从零开始学习 AI。"></textarea><div class="two"><button id="saveMemo">保存回忆便签</button><button id="clearChat">清空桌宠聊天</button></div>
+<label>语音设置</label><div class="check"><input type="checkbox" id="tts" checked><span>朗读团团的回答（使用手机系统声音）</span></div>
+<p style="margin-top:16px">语音采用「按键识别 → AI 文字回复 → 手机语音朗读」，不是 ChatGPT 官方实时语音模式。语音识别效果和发音依赖系统服务。</p>
+</div></div>
+<script>
+(()=>{'use strict';
+const Native=window.PetNative;
+const $=id=>document.getElementById(id);
+const messages=$('messages'),progress=$('progress'),input=$('input'),avatar=$('avatar');
+let settings={connected:false,tts:true,history:[],hearts:0,form:'human',memory:''};
+let human=0,cat=0,sending=false,form='human',hearts=0;
+const frames={human:['human_idle_01.webp','human_idle_02.webp','human_idle_03.webp','human_idle_04.webp','human_idle_05.webp','human_idle_06.webp'],cat:['cat_walk_01.webp','cat_walk_02.webp','cat_walk_03.webp','cat_walk_04.webp','cat_walk_05.webp','cat_walk_06.webp']};
+function illustration(){const arr=frames[form],ix=form==='human'?human:cat;avatar.src='frames/'+arr[ix%arr.length];$('formPill').textContent=form==='human'?'轻点团团 · 摸摸头':'猫团子 · 摸摸脑袋'}
+function mood(text){$('statusBubble').textContent=text}
+function toast(text){const div=document.createElement('div');div.className='msg system';div.textContent=text;messages.appendChild(div);messages.scrollTop=messages.scrollHeight}
+function message(role,text){const node=document.createElement('div');node.className='msg '+role;node.textContent=text;messages.appendChild(node);messages.scrollTop=messages.scrollHeight}
+function send(){const text=input.value.trim();if(!text||sending)return;if(!settings.connected){toast('还没有连接 AI。点右上角 ⚙ 配置你自己的 API Key，或点击「原来的 ChatGPT」。');return}
+ message('user',text);input.value='';sending=true;progress.classList.add('on');$('send').disabled=true;mood('……在认真想。');Native.sendText(text)}
+window.fromNative=function(type,data){
+ if(type==='loading'){progress.classList.add('on');return}
+ if(type==='reply'){message('assistant',data);mood('……我在。')}
+ if(type==='error'){toast(data);mood('……没关系，再试一次。')}
+ if(type==='speech'){input.value=data;input.focus();send()}
+ if(type==='ready'){sending=false;progress.classList.remove('on');$('send').disabled=false}
+ if(type==='saved'){toast(data);if(data.includes('连接设置')){settings.connected=true;$('keyStatus').textContent='已连接'}if(data.includes('清除')){settings.connected=false;$('keyStatus').textContent='未连接'}$('secret').value=''}
+ if(type==='cleared'){messages.innerHTML='';toast('团团的本地聊天记录已清空。')}
+};
+try{settings=JSON.parse(Native.init())}catch(e){settings={connected:false,history:[],hearts:0,form:'human',tts:true,memory:''}}
+form=settings.form||'human';hearts=settings.hearts||0;$('heartPill').textContent='♡ '+hearts;$('memo').value=settings.memory||'';$('tts').checked=settings.tts!==false;$('keyStatus').textContent=settings.connected?'已连接':'未连接';
+illustration();
+if(settings.history && settings.history.length){settings.history.forEach(x=>{if(x.role&&x.content)message(x.role,x.content)})}else message('assistant','……你好。\n我在这里。\n想说话的时候，叫我就好。');
+if(!settings.connected)toast('想和团团独立聊天，请先点击右上角 ⚙ 设置 API Key；也可以直接打开你原来的 ChatGPT 聊天。');
+$('back').onclick=()=>Native.close();
+$('config').onclick=()=>{$('overlay').classList.add('visible')};
+$('closeSheet').onclick=()=>{$('overlay').classList.remove('visible')};
+$('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')$('overlay').classList.remove('visible')});
+$('send').onclick=send;
+input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+$('voice').onclick=()=>{mood('……在听你说话。');Native.recognize()};
+$('official').onclick=()=>Native.openOfficial();
+$('saveKey').onclick=()=>{const key=$('secret').value.trim();Native.setApiKey(key)};
+$('removeKey').onclick=()=>Native.removeApiKey();
+$('saveMemo').onclick=()=>Native.setMemory($('memo').value);
+$('clearChat').onclick=()=>{if(confirm('确认清空这只桌宠保存的聊天记录吗？'))Native.clearHistory()};
+$('tts').onchange=e=>Native.setSpeak(e.target.checked);
+document.querySelectorAll('[data-q]').forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.q;send()}));
+avatar.onclick=()=>{hearts++;$('heartPill').textContent='♡ '+hearts;Native.addHeart();mood(hearts%7===0?'……有点痒。':'……嗯。');
+const heart=document.createElement('div');heart.textContent='♡';heart.className='floating-heart';document.querySelector('.scene').appendChild(heart);setTimeout(()=>heart.remove(),900);
+form=hearts%5===0?(form==='human'?'cat':'human'):form;illustration()};
+let beat=0;setInterval(()=>{beat++;if(form==='human'){human=(human+1)%6}else{cat=(cat+1)%6}illustration();if(beat%19===0)mood(['……今天也在。','有在好好休息吗？','……想陪着你。'][Math.floor(Math.random()*3)])},750);
+})();
+</script></body></html>
