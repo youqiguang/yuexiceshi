@@ -9,27 +9,38 @@
 .overlay{position:fixed;z-index:15;inset:0;background:#5a55637a;display:none;align-items:flex-end}.overlay.visible{display:flex}.sheet{width:100%;max-width:720px;margin:auto;background:#fffaf9;border-radius:27px 27px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom));max-height:87dvh;overflow:auto;box-shadow:0 -10px 45px #4c4c713e}.sheet .row{display:flex;align-items:center;justify-content:space-between;gap:10px}.sheet h2{margin:0 0 8px;color:#636884;font-size:18px}.sheet p{line-height:1.7;font-size:12px;color:#9293a8}.sheet label{display:block;margin:18px 0 8px;font-weight:700;font-size:12px;color:#65708a}.sheet input[type=password],.sheet textarea{width:100%;border:1px solid #e7deea;background:white;border-radius:15px;padding:13px;color:#515f7a;font:13px inherit;outline:none}.sheet textarea{height:86px;resize:vertical}.sheet button{border:0;border-radius:12px;padding:11px 13px;font-weight:700;background:#edf1fc;color:#7b8bb2;font-size:12px}.sheet .primary{background:#9bb1e2;color:white}.pill{display:inline-block;font-size:10px;border-radius:20px;padding:5px 9px;background:#f3f7ff;color:#8197bb}.check{display:flex;gap:9px;align-items:center;font-size:13px}.two{display:flex;gap:8px;margin-top:9px}.two button{flex:1}.note{margin-top:10px;padding:10px;border-radius:12px;background:#fff3e7;font-size:11px;color:#a19083;line-height:1.65}
 @media(max-height:710px){.scene{height:148px;min-height:145px}.scene img{height:142px;width:135px}.scene .bubble{font-size:10px}.scene .small-label{display:none}.quick{padding-bottom:7px}.header{padding-top:5px}}
 @media(min-width:730px){.scene{height:230px}.chat{max-height:50vh}}
-</style></head>
+.voice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.voice-grid label{margin:4px 0 5px!important;font-size:11px}.voice-grid select{width:100%;padding:11px 9px;border-radius:13px;border:1px solid #e3e6f0;background:white;color:#626e92;font-size:12px;outline:none}.voice-range{display:flex;align-items:center;gap:10px}.voice-range input{flex:1;min-width:0;accent-color:#99b3e1}.voice-range span{font-size:12px;color:#8796ad;min-width:34px}.voice-actions{display:flex;gap:8px;flex-wrap:wrap}.voice-actions button{flex:1;min-width:135px}.voice-note{margin:9px 0;padding:11px 12px;border-radius:13px;background:#eaf0fb;color:#75839b;font-size:11px;line-height:1.7}.speaking img{animation:float .75s ease-in-out infinite;filter:drop-shadow(0 0 7px #ffdabfe0)}.language-btn{width:auto;padding:0 9px;font-size:11px;font-weight:700;white-space:nowrap}.voice-badge{display:block;font-size:10px;color:#879ac4;margin:3px 10px 7px}.listen-tools{display:flex;gap:8px;justify-content:flex-end;margin:8px 10px 0}.listen-tools button{border:1px solid #ebeff8;background:#f9fbff;border-radius:11px;font-size:11px;color:#8395bd;padding:6px 10px}.voice-glow{box-shadow:0 0 0 2px #b6bee8a8} </head>
 <body><div class="bg-glow a"></div><div class="bg-glow b"></div><div class="app">
-<header class="header"><button class="back" id="back" aria-label="返回桌宠">‹</button><div class="title"><b>团团的小小聊天屋 ♡</b><small>TUANTUAN · COMPANION</small></div><span class="tag">一直在这里</span><button class="icon" id="config" aria-label="设置">⚙</button></header>
+<header class="header"><button class="back" id="back" aria-label="返回桌宠">‹</button><div class="title"><b>团团的小小聊天屋 ♡</b><small>TUANTUAN · COMPANION</small></div><span class="tag">一直在这里</span><button class="icon language-btn" id="languageQuick" aria-label="快速切换语言">🌐 中文</button><button class="icon" id="config" aria-label="设置">⚙</button></header>
 <section class="scene"><span class="small-label">A LITTLE MOMENT WITH YOU</span><span class="star one">✦</span><span class="star two">✧</span><span class="star three">✧</span><div class="bubble" id="statusBubble">……今天也陪着你。</div><img id="avatar" alt="团团的金发金瞳人物形象"><span class="form-pill" id="formPill">轻点团团 · 摸摸头</span><span class="heart-pill" id="heartPill">♡ 0</span></section>
 <div class="quick"><button data-q="和我聊聊天吧">☁️ 陪我聊天</button><button data-q="来教我一个英语考研词汇吧，先解释再考我">📚 背单词</button><button data-q="给我讲一点有趣的人工智能原理，适合零基础">🤖 学习AI</button><button data-q="给我一个放松的小活动">🍵 休息一下</button><button id="official">💬 原来的 ChatGPT ↗</button></div>
-<main class="chat"><div class="chat-head"><b>✉ 只属于此桌宠的对话</b><span>文字 + 语音输入 + 朗读回复</span></div><div class="messages" id="messages"></div><div class="progress" id="progress">✧ 团团正在认真想……</div>
+<main class="chat"><div class="chat-head"><b>✉ 只属于此桌宠的对话</b><span>文字 + 语音输入 + 朗读回复</span></div><div class="messages" id="messages"></div><div class="listen-tools"><button id="replayVoice" aria-label="重听回复">▶ 再听一遍</button><button id="stopVoice" aria-label="停止播放">▢ 停止声音</button></div><div class="progress" id="progress">✧ 团团正在认真想……</div>
 <div class="composer"><button class="circle" id="voice" aria-label="语音输入">🎙</button><textarea id="input" placeholder="想和团团说什么呀……" rows="1" maxlength="1800"></textarea><button class="circle send" id="send" aria-label="发送">➤</button></div></main>
 <div class="footer-help">不会读取原 ChatGPT 会话 · 语音识别由系统提供 · 按下麦克风才开始收音</div></div>
 <div class="overlay" id="overlay"><div class="sheet"><div class="row"><h2>团团的秘密小房间 ✦</h2><button id="closeSheet">收起 ✕</button></div><p>连接独立的 OpenAI API 后，桌宠才可以智能聊天。它不会自动拥有原本 ChatGPT 的聊天记录或记忆。若想继续以前的聊天，请使用「原来的 ChatGPT」。</p><div class="row"><b style="font-size:12px;color:#717d9e">连接状态</b><span class="pill" id="keyStatus">未连接</span></div>
 <label for="secret">OpenAI API Key（仅填你自己的）</label><input type="password" id="secret" placeholder="sk-..." autocomplete="off" spellcheck="false"><div class="two"><button class="primary" id="saveKey">🔒 保存并连接</button><button id="removeKey">删除密钥</button></div>
 <div class="note">密钥使用 Android Keystore 加密保存于本机，不会写进 APK 或 GitHub。你发送的消息、最近的聊天上下文与记忆便签会随请求提交给 OpenAI API。API 使用费用与 ChatGPT Plus 分开计费；此版本为个人体验，正式分发时应使用自己的服务端代理，避免移动端直接保管 API Key。</div>
 <label for="memo">📖 团团的回忆便签（自愿填写）</label><textarea id="memo" maxlength="1200" placeholder="例如：我们一起做过桌面宠物；我希望从零开始学习 AI。"></textarea><div class="two"><button id="saveMemo">保存回忆便签</button><button id="clearChat">清空桌宠聊天</button></div>
-<label>语音设置</label><div class="two"><button id="voicePreview">🔉 试听团团的声音</button></div><div class="check"><input type="checkbox" id="tts" checked><span>朗读团团的回答（使用手机系统声音）</span></div>
-<p style="margin-top:16px">语音采用「按键识别 → AI 文字回复 → 手机语音朗读」，不是 ChatGPT 官方实时语音模式。系统语音识别可能由设备厂商的在线服务处理声音。语音识别效果和发音依赖系统服务。</p>
+<label>🎙 团团的语言和声音</label>
+<div class="voice-grid">
+<div><label for="voiceLang">他说什么语言？</label><select id="voiceLang"><option value="zh">🇨🇳 中文 · 普通话</option><option value="ja">🇯🇵 日本語</option><option value="en">🇬🇧 English</option></select></div>
+<div><label for="voiceEngine">怎么发声？</label><select id="voiceEngine"><option value="system">免费 · 手机系统音色</option><option value="cloud">✨ AI配音 · 柔和少年音（需API）</option></select></div>
+<div><label for="voiceTone">表演风格（AI配音）</label><select id="voiceTone"><option value="quiet">🍃 清冷·无口系</option><option value="sleepy">🌙 困倦·轻声</option><option value="bright">☀ 清澈·温柔</option></select></div>
+<div><label for="voiceId">基础音色（AI配音）</label><select id="voiceId"><option value="ash">Ash · 较轻的语感</option><option value="echo">Echo · 温和</option><option value="verse">Verse · 柔和</option><option value="cedar">Cedar · 沉静</option></select></div>
+</div>
+<label for="voiceRate">说话速度 <span id="rateLabel">90%</span></label><div class="voice-range"><span>慢</span><input type="range" id="voiceRate" min="70" max="125" step="5" value="90"><span>快</span></div>
+<label for="voicePitch">系统声音音高 <span id="pitchLabel">108%</span></label><div class="voice-range"><span>低</span><input type="range" id="voicePitch" min="85" max="130" step="5" value="110"><span>高</span></div>
+<div class="check"><input type="checkbox" id="tts" checked><span>每次回答后自动朗读</span></div>
+<div class="voice-actions two"><button class="primary" id="saveVoice">保存声音设置</button><button id="voicePreview">🔉 试听选中的语言和声音</button></div>
+<p id="voiceHint" class="voice-note">系统音色不另外收取 OpenAI 配音费；AI配音会单独消耗你的 API 额度。生成的声音是 AI 合成，并非任何动漫角色或声优本人。</p>
+<p style="margin-top:16px">对话语言与语音语言同步（中文 / 日语 / 英语），麦克风识别也使用所选语言。声音可选手机本地 TTS 或 OpenAI API 原创配音；配音模型将在 2027 年初停止服务，后续需要升级。语音识别可能由手机厂商在线处理。</p>
 </div></div>
 <script src="frames.js"></script><script>
 (()=>{'use strict';
 const Native=window.PetNative;
 const $=id=>document.getElementById(id);
 const messages=$('messages'),progress=$('progress'),input=$('input'),avatar=$('avatar');
-let settings={connected:false,tts:true,history:[],hearts:0,form:'human',memory:''};
+let settings={connected:false,tts:true,history:[],hearts:0,form:'human',memory:'',voiceLang:'zh',voiceEngine:'system',voiceId:'ash',voiceTone:'quiet',voiceRate:90,voicePitch:108};
 let human=0,cat=0,sending=false,form='human',hearts=0;
 const frames={human:['human_idle_01.webp','human_idle_02.webp','human_idle_03.webp','human_idle_04.webp','human_idle_05.webp','human_idle_06.webp'],cat:['cat_walk_01.webp','cat_walk_02.webp','cat_walk_03.webp','cat_walk_04.webp','cat_walk_05.webp','cat_walk_06.webp']};
 function illustration(){const arr=frames[form],ix=form==='human'?human:cat;avatar.src=(typeof INLINE_FRAMES!=='undefined' ? INLINE_FRAMES[arr[ix%arr.length].replace('.webp','')] : '');$('formPill').textContent=form==='human'?'轻点团团 · 摸摸头':'猫团子 · 摸摸脑袋'}
@@ -40,6 +51,9 @@ function send(){const text=input.value.trim();if(!text||sending)return;if(!setti
  message('user',text);input.value='';sending=true;progress.classList.add('on');$('send').disabled=true;mood('……在认真想。');Native.sendText(text)}
 window.fromNative=function(type,data){
  if(type==='loading'){progress.classList.add('on');return}
+ if(type==='speaking'){document.querySelector('.scene').classList.add('speaking');mood(languageText('……正在说话。','……話してる。','...Speaking to you.'));return}
+ if(type==='speechend'){document.querySelector('.scene').classList.remove('speaking');return}
+ if(type==='voiceSettings'){toast(data);syncLangBadge();return}
  if(type==='reply'){message('assistant',data);mood('……我在。')}
  if(type==='error'){toast(data);mood('……没关系，再试一次。')}
  if(type==='speech'){input.value=data;input.focus();send()}
@@ -48,7 +62,26 @@ window.fromNative=function(type,data){
  if(type==='cleared'){messages.innerHTML='';toast('团团的本地聊天记录已清空。')}
 };
 try{settings=JSON.parse(Native.init())}catch(e){settings={connected:false,history:[],hearts:0,form:'human',tts:true,memory:''}}
+const langNames={zh:'中文',ja:'日本語',en:'English'};
+function languageText(zh,ja,en){return $('voiceLang').value==='ja'?ja:$('voiceLang').value==='en'?en:zh}
+function syncLangBadge(){$('languageQuick').textContent='🌐 '+(langNames[$('voiceLang').value]||'中文')}
+function updateVoiceHint(){
+ const cloud=$('voiceEngine').value==='cloud';
+ $('voiceHint').textContent=cloud?'✨ AI生成音色（非真人配音），可以用语气指令表达偏动漫的安静少年感，但效果受音色与语言影响。每次合成单独消耗 OpenAI API 额度；目前用的语音模型计划 2027-01-06 下线。':'🌿 免费系统音色，支持语言、速度、音高。能否读日语或英语取决于手机有没有安装对应语音包；模仿动漫无口系效果有限。';
+ $('voicePitch').disabled=cloud;
+ $('voiceId').disabled=!cloud;
+ $('voiceTone').disabled=!cloud;
+}
+function saveVoiceSettings(){
+ const lang=$('voiceLang').value,engine=$('voiceEngine').value,voice=$('voiceId').value,tone=$('voiceTone').value,rate=parseInt($('voiceRate').value,10),pitch=parseInt($('voicePitch').value,10);
+ Native.setVoiceOptions(lang,engine,voice,tone,rate,pitch);
+ settings.voiceLang=lang;settings.voiceEngine=engine;settings.voiceId=voice;settings.voiceTone=tone;
+ settings.voiceRate=rate;settings.voicePitch=pitch;
+ syncLangBadge();updateVoiceHint();
+}
 form=settings.form||'human';hearts=settings.hearts||0;$('heartPill').textContent='♡ '+hearts;$('memo').value=settings.memory||'';$('tts').checked=settings.tts!==false;$('keyStatus').textContent=settings.connected?'已连接':'未连接';
+$('voiceLang').value=settings.voiceLang||'zh';$('voiceEngine').value=settings.voiceEngine||'system';$('voiceId').value=settings.voiceId||'ash';$('voiceTone').value=settings.voiceTone||'quiet';$('voiceRate').value=settings.voiceRate||90;$('voicePitch').value=settings.voicePitch||108;
+$('rateLabel').textContent=$('voiceRate').value+'%';$('pitchLabel').textContent=$('voicePitch').value+'%';updateVoiceHint();syncLangBadge();
 illustration();
 if(settings.history && settings.history.length){settings.history.forEach(x=>{if(x.role&&x.content)message(x.role,x.content)})}else message('assistant','……你好。\n我在这里。\n想说话的时候，叫我就好。');
 if(!settings.connected)toast('想和团团独立聊天，请先点击右上角 ⚙ 设置 API Key；也可以直接打开你原来的 ChatGPT 聊天。');
@@ -65,7 +98,18 @@ $('removeKey').onclick=()=>Native.removeApiKey();
 $('saveMemo').onclick=()=>Native.setMemory($('memo').value);
 $('clearChat').onclick=()=>{if(confirm('确认清空这只桌宠保存的聊天记录吗？'))Native.clearHistory()};
 $('tts').onchange=e=>Native.setSpeak(e.target.checked);
-$('voicePreview').onclick=()=>Native.previewVoice();
+$('saveVoice').onclick=saveVoiceSettings;
+$('voicePreview').onclick=()=>{saveVoiceSettings();Native.previewVoice()};
+$('replayVoice').onclick=()=>Native.replayVoice();
+$('stopVoice').onclick=()=>Native.stopVoice();
+$('voiceRate').oninput=()=>{$('rateLabel').textContent=$('voiceRate').value+'%'};
+$('voicePitch').oninput=()=>{$('pitchLabel').textContent=$('voicePitch').value+'%'};
+$('voiceEngine').onchange=()=>{updateVoiceHint();if($('voiceEngine').value==='cloud' && !settings.connected){toast('AI配音需要你自己的 OpenAI API Key；可以先用免费的系统语音试试。')}};
+$('languageQuick').onclick=()=>{
+ const langs=['zh','ja','en'];let idx=langs.indexOf($('voiceLang').value);$('voiceLang').value=langs[(idx+1)%langs.length];saveVoiceSettings();
+ toast(languageText('之后团团会用中文回答你。','これから日本語で答えるね。','From now on, I will speak English.'));
+};
+$('voiceLang').onchange=()=>{updateVoiceHint();syncLangBadge()};
 document.querySelectorAll('[data-q]').forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.q;send()}));
 avatar.onclick=()=>{hearts++;$('heartPill').textContent='♡ '+hearts;Native.addHeart();mood(hearts%7===0?'……有点痒。':'……嗯。');
 const heart=document.createElement('div');heart.textContent='♡';heart.className='floating-heart';document.querySelector('.scene').appendChild(heart);setTimeout(()=>heart.remove(),900);
