@@ -24,9 +24,9 @@
 <label for="providerBase">Base URL · 服务地址</label><input type="url" id="providerBase" placeholder="https://example.com/v1" autocomplete="off" autocapitalize="off" spellcheck="false">
 <p class="caption">通常填写中转站提供的 <code>https://域名/v1</code>。程序自动拼接 <code>/chat/completions</code> 或 <code>/responses</code>；不要填写网页管理后台地址。</p>
 <label for="providerMode">接口格式</label><select id="providerMode"><option value="chat">Chat Completions（常见中转站）</option><option value="responses">Responses（OpenAI 新接口）</option></select>
-<label for="providerModel">模型 ID · 由服务商提供</label><input id="providerModel" placeholder="例如 gpt-4.1-mini 或中转站自己的模型 ID" autocapitalize="off" spellcheck="false">
-<label for="providerSecret">API Key · 可与官方密钥不同</label><input id="providerSecret" type="password" autocomplete="off" spellcheck="false" placeholder="填写并保存新 Key；留空保持旧 Key">
-<div class="actions"><button class="primary" id="providerSave">🔒 保存并使用</button><button id="providerSwitch">使用已保存配置</button><button class="danger" id="providerRemove">删除该槽位密钥</button></div>
+<label for="providerModel">模型 ID · 由服务商提供</label><input id="providerModel" list="knownModels" placeholder="例如 gpt-4.1-mini 或中转站自己的模型 ID" autocapitalize="off" spellcheck="false">
+<datalist id="knownModels"></datalist><label for="providerSecret">API Key · 可与官方密钥不同</label><input id="providerSecret" type="password" autocomplete="off" spellcheck="false" placeholder="填写并保存新 Key；留空保持旧 Key">
+<div class="actions"><button class="primary" id="providerSave">🔒 保存并使用</button><button id="providerSwitch">使用已保存配置</button><button class="danger" id="providerRemove">删除该槽位密钥</button></div><div class="actions"><button id="providerTest">🧪 测试当前线路</button><button id="modelFetch">🔍 拉取服务商模型</button></div>
 <p class="caption" id="providerKeyStatus">当前槽位尚未设置密钥。</p>
 <div class="note">⚠️ 使用第三方中转站时，你的 API Key、发送的聊天内容、最近聊天上下文及自愿填写的记忆便签会经过该服务商。请确认服务商可信；我们不会替你验证其隐私政策或售后承诺。仅允许 HTTPS。</div></div>
 <div class="api-box"><h3>🔉 云端 AI 配音线路（可独立设置）</h3>
@@ -70,6 +70,15 @@ window.fromNative=function(type,data){
  if(type==='speechend'){document.querySelector('.scene').classList.remove('speaking');return}
  if(type==='providers'){
    try{profileData=JSON.parse(data);updateProviderUI(true)}catch(e){toast('设置读取失败')}
+   return;
+ }
+ if(type==='testResult'){toast(data);return}
+ if(type==='modelList'){
+   try{
+     const models=JSON.parse(data);
+     $('knownModels').replaceChildren(...models.map(name=>{let o=document.createElement('option');o.value=name;return o;}));
+     toast('已发现 '+models.length+' 个模型 ID，可在模型输入框中选择。');
+   }catch(e){toast('模型列表格式不正确。')}
    return;
  }
  if(type==='voiceSettings'){toast(data);syncLangBadge();return}
@@ -149,6 +158,8 @@ $('providerSave').onclick=()=>{
  Native.saveProvider(id,name,base,model,mode,key,!!key.trim());
 };
 $('providerSwitch').onclick=()=>Native.selectProvider($('providerSlot').value);
+$('providerTest').onclick=()=>Native.testConnection();
+$('modelFetch').onclick=()=>Native.fetchModels();
 $('providerRemove').onclick=()=>{if(confirm('确定删除当前槽位保存的 API Key？'))Native.clearProviderKey($('providerSlot').value)};
 $('voiceRoute').onchange=()=>{$('voiceCustomBox').classList.toggle('hidden',$('voiceRoute').value!=='custom')};
 $('voiceApiSave').onclick=()=>Native.saveVoiceProvider($('voiceRoute').value,$('voiceApiModel').value,$('voiceBase').value,$('voiceSecret').value,!!$('voiceSecret').value.trim());
