@@ -1,7 +1,7 @@
-name: Build TuanTuan Android APK
+name: Build TuanTuan v6 Voice Companion
 on:
   push:
-    branches: [tuan-apk]
+    branches: [tuan-v6]
   workflow_dispatch:
 permissions:
   contents: read
@@ -33,11 +33,11 @@ jobs:
       - name: Rename downloadable APK
         run: |
           mkdir -p output
-          cp app/build/outputs/apk/debug/app-debug.apk output/TuanTuan-v5-Android.apk
-          ls -lh output/TuanTuan-v5-Android.apk
+          cp app/build/outputs/apk/debug/app-debug.apk output/TuanTuan-v6-VoiceCompanion.apk
+          ls -lh output/TuanTuan-v6-VoiceCompanion.apk
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: TuanTuan-v5-Android-APK
-          path: output/TuanTuan-v5-Android.apk
+          name: TuanTuan-v6-VoiceCompanion-APK
+          path: output/TuanTuan-v6-VoiceCompanion.apk
           if-no-files-found: error
