@@ -30,6 +30,7 @@ public final class VoiceRenderer {
     private final Context context;
     private final SharedPreferences prefs;
     private final Supplier<String> key;
+    private final ApiProfiles providers;
     private final Status callback;
     private final Handler main = new Handler(Looper.getMainLooper());
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
@@ -38,9 +39,9 @@ public final class VoiceRenderer {
     private File playingFile;
     private volatile boolean closed=false;
 
-    public VoiceRenderer(Context context,SharedPreferences prefs,Supplier<String> key,Status callback){
+    public VoiceRenderer(Context context,SharedPreferences prefs,Supplier<String> key,Status callback,ApiProfiles providers){
         this.context=context.getApplicationContext();
-        this.prefs=prefs;this.key=key;this.callback=callback;
+        this.prefs=prefs;this.key=key;this.callback=callback;this.providers=providers;
         tts=new TextToSpeech(this.context,status->{
             if(status==TextToSpeech.SUCCESS && tts!=null) {
                 tts.setOnUtteranceProgressListener(new UtteranceProgressListener(){
@@ -125,7 +126,7 @@ public final class VoiceRenderer {
         HttpURLConnection conn=null;File file=null;
         try{
             JSONObject body=new JSONObject();
-            body.put("model","gpt-4o-mini-tts");
+            body.put("model",providers.voiceModel());
             body.put("voice",voiceId());
             body.put("input",line);
             body.put("response_format","mp3");
@@ -140,7 +141,7 @@ public final class VoiceRenderer {
                 default:instructions+="Understated calm, cool yet warm, soft-spoken with barely noticeable emotion.";
             }
             body.put("instructions",instructions);
-            conn=(HttpURLConnection)new URL("https://api.openai.com/v1/audio/speech").openConnection();
+            conn=(HttpURLConnection)new URL(providers.voiceUrl()).openConnection();
             conn.setRequestMethod("POST");
             conn.setConnectTimeout(14000);conn.setReadTimeout(45000);conn.setDoOutput(true);
             conn.setRequestProperty("Authorization","Bearer "+token);
@@ -149,7 +150,7 @@ public final class VoiceRenderer {
                 out.write(body.toString().getBytes(StandardCharsets.UTF_8));
             }
             int code=conn.getResponseCode();
-            if(code>=400)throw new IllegalStateException(code==429?"API 语音额度不足，或请求过于频繁。":"AI配音出错（HTTP "+code+"）。");
+            if(code>=400)throw new IllegalStateException(code==429?"语音服务额度不足或请求频繁（429）。":code==404?"语音中转站没有 /audio/speech 接口（404），请改用独立语音地址或系统语音。":"AI配音出错（HTTP "+code+"），可能不支持当前语音模型。");
             file=File.createTempFile("tuan_original_voice_",".mp3",context.getCacheDir());
             try(InputStream in=conn.getInputStream();FileOutputStream out=new FileOutputStream(file)){
                 byte[] chunk=new byte[8192];int n;int total=0;
