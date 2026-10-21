@@ -24,7 +24,7 @@
 <label>语音设置</label><div class="two"><button id="voicePreview">🔉 试听团团的声音</button></div><div class="check"><input type="checkbox" id="tts" checked><span>朗读团团的回答（使用手机系统声音）</span></div>
 <p style="margin-top:16px">语音采用「按键识别 → AI 文字回复 → 手机语音朗读」，不是 ChatGPT 官方实时语音模式。系统语音识别可能由设备厂商的在线服务处理声音。语音识别效果和发音依赖系统服务。</p>
 </div></div>
-<script>
+<script src="frames.js"></script><script>
 (()=>{'use strict';
 const Native=window.PetNative;
 const $=id=>document.getElementById(id);
@@ -32,7 +32,7 @@ const messages=$('messages'),progress=$('progress'),input=$('input'),avatar=$('a
 let settings={connected:false,tts:true,history:[],hearts:0,form:'human',memory:''};
 let human=0,cat=0,sending=false,form='human',hearts=0;
 const frames={human:['human_idle_01.webp','human_idle_02.webp','human_idle_03.webp','human_idle_04.webp','human_idle_05.webp','human_idle_06.webp'],cat:['cat_walk_01.webp','cat_walk_02.webp','cat_walk_03.webp','cat_walk_04.webp','cat_walk_05.webp','cat_walk_06.webp']};
-function illustration(){const arr=frames[form],ix=form==='human'?human:cat;avatar.src='frames/'+arr[ix%arr.length];$('formPill').textContent=form==='human'?'轻点团团 · 摸摸头':'猫团子 · 摸摸脑袋'}
+function illustration(){const arr=frames[form],ix=form==='human'?human:cat;avatar.src=(typeof INLINE_FRAMES!=='undefined' ? INLINE_FRAMES[arr[ix%arr.length].replace('.webp','')] : '');$('formPill').textContent=form==='human'?'轻点团团 · 摸摸头':'猫团子 · 摸摸脑袋'}
 function mood(text){$('statusBubble').textContent=text}
 function toast(text){const div=document.createElement('div');div.className='msg system';div.textContent=text;messages.appendChild(div);messages.scrollTop=messages.scrollHeight}
 function message(role,text){const node=document.createElement('div');node.className='msg '+role;node.textContent=text;messages.appendChild(node);messages.scrollTop=messages.scrollHeight}
