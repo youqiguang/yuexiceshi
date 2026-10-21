@@ -83,7 +83,7 @@ form=settings.form||'human';hearts=settings.hearts||0;$('heartPill').textContent
 $('voiceLang').value=settings.voiceLang||'zh';$('voiceEngine').value=settings.voiceEngine||'system';$('voiceId').value=settings.voiceId||'ash';$('voiceTone').value=settings.voiceTone||'quiet';$('voiceRate').value=settings.voiceRate||90;$('voicePitch').value=settings.voicePitch||108;
 $('rateLabel').textContent=$('voiceRate').value+'%';$('pitchLabel').textContent=$('voicePitch').value+'%';updateVoiceHint();syncLangBadge();
 illustration();
-if(settings.history && settings.history.length){settings.history.forEach(x=>{if(x.role&&x.content)message(x.role,x.content)})}else message('assistant','……你好。\n我在这里。\n想说话的时候，叫我就好。');
+if(settings.history && settings.history.length){settings.history.forEach(x=>{if(x.role&&x.content)message(x.role,x.content)})}else message('assistant',languageText('……你好。\n我在这里。\n想说话的时候，叫我就好。','……こんにちは。ここにいるよ。話したいときに呼んで。','...Hello. I’m here. Call me whenever you want to talk.'));
 if(!settings.connected)toast('想和团团独立聊天，请先点击右上角 ⚙ 设置 API Key；也可以直接打开你原来的 ChatGPT 聊天。');
 $('back').onclick=()=>Native.close();
 $('config').onclick=()=>{$('overlay').classList.add('visible')};
@@ -111,9 +111,9 @@ $('languageQuick').onclick=()=>{
 };
 $('voiceLang').onchange=()=>{updateVoiceHint();syncLangBadge()};
 document.querySelectorAll('[data-q]').forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.q;send()}));
-avatar.onclick=()=>{hearts++;$('heartPill').textContent='♡ '+hearts;Native.addHeart();mood(hearts%7===0?'……有点痒。':'……嗯。');
+avatar.onclick=()=>{hearts++;$('heartPill').textContent='♡ '+hearts;Native.addHeart();mood(hearts%7===0?languageText('……有点痒。','……くすぐったい。','...That tickles.'):languageText('……嗯。','……うん。','...Mm.'));
 const heart=document.createElement('div');heart.textContent='♡';heart.className='floating-heart';document.querySelector('.scene').appendChild(heart);setTimeout(()=>heart.remove(),900);
 form=hearts%5===0?(form==='human'?'cat':'human'):form;illustration()};
-let beat=0;setInterval(()=>{beat++;if(form==='human'){human=(human+1)%6}else{cat=(cat+1)%6}illustration();if(beat%19===0)mood(['……今天也在。','有在好好休息吗？','……想陪着你。'][Math.floor(Math.random()*3)])},750);
+let beat=0;setInterval(()=>{beat++;if(form==='human'){human=(human+1)%6}else{cat=(cat+1)%6}illustration();if(beat%19===0)mood([languageText('……今天也在。','……今日もいるよ。','...Still here.'),languageText('有在好好休息吗？','ちゃんと休めてる？','Have you rested?'),languageText('……想陪着你。','……そばにいたい。','...I want to stay by your side.')][Math.floor(Math.random()*3)])},750);
 })();
 </script></body></html>
