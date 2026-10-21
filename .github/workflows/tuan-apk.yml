@@ -1,7 +1,7 @@
-name: Build TuanTuan v7 Trilingual Anime Voice
+name: Build TuanTuan v8 Relay Companion
 on:
   push:
-    branches: [tuan-v7-voice]
+    branches: [tuan-v8-relay]
   workflow_dispatch:
 permissions:
   contents: read
@@ -33,11 +33,11 @@ jobs:
       - name: Rename downloadable APK
         run: |
           mkdir -p output
-          cp app/build/outputs/apk/debug/app-debug.apk output/TuanTuan-v7-TrilingualVoice.apk
-          ls -lh output/TuanTuan-v7-TrilingualVoice.apk
+          cp app/build/outputs/apk/debug/app-debug.apk output/TuanTuan-v8-CustomAPIRelay.apk
+          ls -lh output/TuanTuan-v8-CustomAPIRelay.apk
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: TuanTuan-v7-TrilingualVoice-APK
-          path: output/TuanTuan-v7-TrilingualVoice.apk
+          name: TuanTuan-v8-CustomAPIRelay-APK
+          path: output/TuanTuan-v8-CustomAPIRelay.apk
           if-no-files-found: error
