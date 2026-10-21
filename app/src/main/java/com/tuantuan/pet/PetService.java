@@ -12,7 +12,6 @@ import android.content.pm.ServiceInfo;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -61,8 +60,7 @@ public final class PetService extends Service {
         PendingIntent home = PendingIntent.getActivity(this,1,
             new Intent(this,MainActivity.class),
             PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
-        Intent chatIntent = getPackageManager().getLaunchIntentForPackage("com.openai.chatgpt");
-        if (chatIntent==null) chatIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://chatgpt.com/"));
+        Intent chatIntent = new Intent(this, CompanionActivity.class);
         chatIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent chat = PendingIntent.getActivity(this,2,chatIntent,
             PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
@@ -74,7 +72,7 @@ public final class PetService extends Service {
             .setContentText("轻点摸头 · 双击变身 · 长按休息 · 拖动移动")
             .setSmallIcon(android.R.drawable.star_on)
             .setContentIntent(home).setOngoing(true)
-            .addAction(android.R.drawable.ic_menu_send,"继续聊天",chat)
+            .addAction(android.R.drawable.ic_menu_send,"语音和AI聊天",chat)
             .addAction(android.R.drawable.ic_menu_close_clear_cancel,"收起团团",stop)
             .build();
         if (Build.VERSION.SDK_INT>=34)
@@ -196,8 +194,7 @@ public final class PetService extends Service {
         }
     }
     private void openChat() {
-        Intent i=getPackageManager().getLaunchIntentForPackage("com.openai.chatgpt");
-        if (i==null) i=new Intent(Intent.ACTION_VIEW,Uri.parse("https://chatgpt.com/"));
+        Intent i=new Intent(this,CompanionActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         try {startActivity(i);}catch(Exception ignored){}
     }
